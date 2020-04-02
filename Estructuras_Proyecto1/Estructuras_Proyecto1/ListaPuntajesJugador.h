@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <cstdio>
+#include <fstream>
 #include "NodoPuntaje.h"
 
 using namespace std;
@@ -53,8 +54,8 @@ public:
 							r = 1;
 						}
 						else {
-							aux = aux->getSiguiente();
 							temporal = aux;
+							aux = aux->getSiguiente();
 						}
 					}
 					else {
@@ -66,5 +67,43 @@ public:
 	}
 	NodoPuntaje* puntajeMasAlto() {
 		return primero;
+	}
+	void graficar(string nombrejugador) {
+		NodoPuntaje* aux = primero;
+		int i=0;
+		string grafica = "digraph PuntajeJugador" + nombrejugador + "{\nrankdir=\u0022LR\u0022;\n";
+		while (aux !=NULL)
+		{
+			grafica += "node%i [label=\u0022%i\u0022];\n",i,aux->getPuntaje();
+			i++;
+			aux = aux->getSiguiente();
+		}
+		int j = 0;
+		int l = 1;
+		aux = primero;
+		while (aux!=NULL)
+		{
+			if (aux->getSiguiente()!=NULL)
+			{
+				grafica += "node%i -> node%i;\n", j, l;
+			}
+			j++;
+			l++;
+			aux = aux->getSiguiente();
+		}
+		grafica += "}";
+		ofstream archivo;
+		archivo.open("ListaPuntajes.txt", ios::out);
+
+		if (archivo.fail())
+		{
+			cout << "Error: no se pudo abrir el archivo";
+			exit(1);
+		}
+		archivo << grafica;
+
+		archivo.close();
+
+		system("dot -Tjpg ListaPuntajes.txt -o ListaPuntajes.jpg");
 	}
 };

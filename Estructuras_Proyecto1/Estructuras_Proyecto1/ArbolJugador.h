@@ -81,7 +81,7 @@ public:
 
 		archivo.close();
 
-		system("dot -Tjpg ArbolJugadores.txt -o rbolJugadores.jpg");
+		system("dot -Tjpg ArbolJugadores.txt -o ArbolJugadores.jpg");
 	}
 	void graficar(Jugador* actual, string grafica, int i) {
 		int j = i;

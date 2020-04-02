@@ -3,8 +3,22 @@
 
 #include <iostream>
 #include "Diccionario.h"
+#include "ArbolJugador.h"
+#include "ColaLetras.h"
+#include "FichasJugador.h"
+#include "Jugador.h"
+#include "ListaPuntajesJugador.h"
+#include "ListaTopJugadores.h"
+#include "NodoCola.h"
+#include "NodoDiccionario.h"
+#include "NodoMatriz.h"
+#include "NodoPuntaje.h"
+#include "Tablero.h"
 
 using namespace std;
+
+
+Diccionario* nuevoDiccionario = new Diccionario();
 
 int main()
 {
@@ -45,7 +59,6 @@ void MenuDiccionario() {
 }
 void diccionario() {
     int opcion;
-    Diccionario* nuevo = new Diccionario();
     do
     {
         switch (opcion)
@@ -55,7 +68,7 @@ void diccionario() {
             string palabra;
             cout << "Escriba su palabra a para agregar: ";
             cin >> palabra;
-            nuevo->insertar(palabra);
+            nuevoDiccionario->insertar(palabra);
         }break;
         }
     } while (opcion!=4);

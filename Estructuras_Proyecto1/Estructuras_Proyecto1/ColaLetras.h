@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <cstdio>
+#include <fstream>
 #include "NodoCola.h"
 
 using namespace std;
@@ -45,5 +46,43 @@ public:
 			}
 		}
 		
+	}
+	void graficarCola() {
+		NodoCola* aux = primero;
+		string grafica = "digraph ColaLetras{\nrankdir=\u0022TB\u0022;\n";
+		int i = 0;
+		while (aux!=NULL)
+		{
+			grafica += "node%i [label=\u0022%c - %i\u0022]\n",i,aux->getCaracter(),aux->getPunteo();
+			i++;
+			aux = aux->getSiguiente();
+		}
+		int j = 0;
+		int l = 1;
+		aux = primero;
+		while (aux != NULL)
+		{
+			if (aux->getSiguiente()!=NULL)
+			{
+				grafica += "node%i -> node%i;\n",j,l;
+			}
+			j++;
+			l++;
+			aux = aux->getSiguiente();
+		}
+		grafica += "}";
+		ofstream archivo;
+		archivo.open("ColaLetras.txt", ios::out);
+
+		if (archivo.fail())
+		{
+			cout << "Error: no se pudo abrir el archivo";
+			exit(1);
+		}
+		archivo << grafica;
+
+		archivo.close();
+
+		system("dot -Tjpg ColaLetras.txt -o ColaLetras.jpg");
 	}
 };

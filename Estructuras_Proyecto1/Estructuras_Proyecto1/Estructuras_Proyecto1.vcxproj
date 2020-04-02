@@ -159,7 +159,9 @@
     <ClInclude Include="ListaTopJugadores.h" />
     <ClInclude Include="NodoCola.h" />
     <ClInclude Include="NodoDiccionario.h" />
+    <ClInclude Include="NodoMatriz.h" />
     <ClInclude Include="NodoPuntaje.h" />
+    <ClInclude Include="Tablero.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

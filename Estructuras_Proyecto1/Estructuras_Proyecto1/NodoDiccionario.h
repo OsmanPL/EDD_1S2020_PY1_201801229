@@ -12,7 +12,6 @@ private:
 	NodoDiccionario* anterior;
 
 public:
-	~NodoDiccionario();
 	void setPalabra(string cadena) {
 		palabra = cadena;
 	}

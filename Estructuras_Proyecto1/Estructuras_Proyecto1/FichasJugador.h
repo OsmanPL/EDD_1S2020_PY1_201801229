@@ -57,10 +57,17 @@ public:
 		}
 	}
 	void borrar(NodoCola* eliminar) {
-		NodoCola* derecha = eliminar->getSiguiente();
-		NodoCola* izquierda = eliminar->getAnterior();
-		derecha->setAnterior(izquierda);
-		izquierda->setAnterior(derecha);
+		NodoCola* aux = primero;
+		while (aux!=NULL)
+		{
+			if (aux == eliminar)
+			{
+				aux->getAnterior()->setSiguiente(aux->getSiguiente());
+				aux->getSiguiente()->setAnterior(aux->getAnterior());
+				break;
+			}
+			aux = aux->getSiguiente();
+		}
 	}
 	void graficar() {
 		NodoCola* aux = primero;
@@ -68,7 +75,7 @@ public:
 		string grafica = "digraph FichasJugador{\nrankdir=\u0022LR\u0022;\n";
 		while (aux != NULL)
 		{
-			grafica += "node%i [label=\u0022%c\u0022];\n", i, aux->getCaracter();
+			grafica += "node"+to_string(i)+" [label=\u0022"+aux->getCaracter()+"\u0022];\n";
 			aux = aux->getSiguiente();
 			i++;
 		}
@@ -79,8 +86,8 @@ public:
 		{
 			if (aux->getSiguiente()!=NULL)
 			{
-				grafica += "node%i -> node%i;",j,l;
-				grafica += "node%i -> node%i;", l, j;
+				grafica += "node"+to_string(j)+" -> node"+to_string(l)+";";
+				grafica += "node"+to_string(l)+" -> node"+to_string(j)+";";
 			}
 			aux = aux->getSiguiente();
 			j++;

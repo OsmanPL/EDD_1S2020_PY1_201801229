@@ -218,7 +218,6 @@ public:
 		NodoMatriz* doble = new NodoMatriz();
 		doble->setX(x);
 		doble->setY(y);
-		doble->setEstado("X1");
 		doble->setNodo(ficha);
 		bool exColumna = existeColumna(y);
 		bool exFila = existeFila(x);
@@ -252,16 +251,21 @@ public:
 							nodo->setArriba(temporal->getArriba());
 							temporal->getArriba()->setAbajo(nodo);
 							temporal->getAbajo()->setArriba(nodo);
+							nodo->setEstado(temporal->getEstado());
 						}
 						else if (temporal->getAbajo()!=NULL && temporal->getArriba()==NULL)
 						{
 							nodo->setAbajo(temporal->getAbajo());
 							temporal->getAbajo()->setArriba(nodo);
+
+							nodo->setEstado(temporal->getEstado());
 						}
 						else if (temporal->getAbajo()==NULL && temporal->getArriba()!=NULL)
 						{
 							nodo->setArriba(temporal->getArriba());
 							temporal->getArriba()->setAbajo(nodo);
+
+							nodo->setEstado(temporal->getEstado());
 						}
 						temporal = NULL;
 						agregar = false;
@@ -296,16 +300,22 @@ public:
 							nodo->setArriba(temporal->getArriba());
 							temporal->getArriba()->setAbajo(nodo);
 							temporal->getAbajo()->setArriba(nodo);
+
+							nodo->setEstado(temporal->getEstado());
 						}
 						else if (temporal->getAbajo() != NULL && temporal->getArriba() == NULL)
 						{
 							nodo->setAbajo(temporal->getAbajo());
 							temporal->getAbajo()->setArriba(nodo);
+
+							nodo->setEstado(temporal->getEstado());
 						}
 						else if (temporal->getAbajo() == NULL && temporal->getArriba() != NULL)
 						{
 							nodo->setArriba(temporal->getArriba());
 							temporal->getArriba()->setAbajo(nodo);
+
+							nodo->setEstado(temporal->getEstado());
 						}
 						temporal = NULL;
 						agregar = false;
@@ -349,16 +359,22 @@ public:
 							nodo->setIzquierda(temporal->getIzquierda());
 							temporal->getIzquierda()->setDerecha(nodo);
 							temporal->getDerecha()->setIzquierda(nodo);
+
+							nodo->setEstado(temporal->getEstado());
 						}
 						else if (temporal->getDerecha() != NULL && temporal->getIzquierda() == NULL)
 						{
 							nodo->setDerecha(temporal->getDerecha());
 							temporal->getDerecha()->setIzquierda(nodo);
+
+							nodo->setEstado(temporal->getEstado());
 						}
 						else if (temporal->getDerecha() == NULL && temporal->getIzquierda() != NULL)
 						{
 							nodo->setIzquierda(temporal->getIzquierda());
 							temporal->getIzquierda()->setDerecha(nodo);
+
+							nodo->setEstado(temporal->getEstado());
 						}
 						agregar = false;
 					}
@@ -392,16 +408,22 @@ public:
 							nodo->setIzquierda(temporal->getIzquierda());
 							temporal->getIzquierda()->setDerecha(nodo);
 							temporal->getDerecha()->setIzquierda(nodo);
+
+							nodo->setEstado(temporal->getEstado());
 						}
 						else if (temporal->getDerecha() != NULL && temporal->getIzquierda() == NULL)
 						{
 							nodo->setDerecha(temporal->getDerecha());
 							temporal->getDerecha()->setIzquierda(nodo);
+
+							nodo->setEstado(temporal->getEstado());
 						}
 						else if (temporal->getDerecha() == NULL && temporal->getIzquierda() != NULL)
 						{
 							nodo->setIzquierda(temporal->getIzquierda());
 							temporal->getIzquierda()->setDerecha(nodo);
+
+							nodo->setEstado(temporal->getEstado());
 						}
 						agregar = false;
 					}

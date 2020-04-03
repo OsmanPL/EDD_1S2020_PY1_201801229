@@ -41,12 +41,12 @@ public:
 			}
 			else {
 				while (r == 0) {
-					if (aux != NULL)
+					if (aux->getSiguiente() != NULL)
 					{
 						if (puntaje >= aux->getPuntaje())
 						{
-							nuevo->setSiguiente(aux->getSiguiente());
-							aux->setSiguiente(nuevo);
+							temporal->setSiguiente(nuevo);
+							nuevo->setSiguiente(aux);
 							r = 1;
 						}
 						else {
@@ -55,20 +55,30 @@ public:
 						}
 					}
 					else {
-						temporal->setSiguiente(nuevo);
+						if (puntaje >= aux->getPuntaje())
+						{
+							temporal->setSiguiente(nuevo);
+							nuevo->setSiguiente(aux);
+							r = 1;
+						}
+						else {
+
+							aux->setSiguiente(nuevo);
+						}
+						r = 1;
 					}
 				}
 			}
 		}
 	}
 
-	void graficar(string nombrejugador) {
+	void graficar() {
 		NodoPuntaje* aux = primero;
 		int i = 0;
-		string grafica = "digraph PuntajeJugador" + nombrejugador + "{\nrankdir=\u0022LR\u0022;\n";
+		string grafica = "digraph TopScore{\nrankdir=\u0022LR\u0022;\n";
 		while (aux != NULL)
 		{
-			grafica += "node%i [label=\u0022%s - %i\u0022];\n", i,aux->getNombreJugador(), aux->getPuntaje();
+			grafica += "node"+to_string(i)+" [label=\u0022"+aux->getNombreJugador()+" - "+to_string(aux->getPuntaje())+"\u0022];\n";
 			i++;
 			aux = aux->getSiguiente();
 		}
@@ -79,7 +89,7 @@ public:
 		{
 			if (aux->getSiguiente() != NULL)
 			{
-				grafica += "node%i -> node%i;\n", j, l;
+				grafica += "node"+to_string(j)+" -> node"+to_string(l)+";\n";
 			}
 			j++;
 			l++;

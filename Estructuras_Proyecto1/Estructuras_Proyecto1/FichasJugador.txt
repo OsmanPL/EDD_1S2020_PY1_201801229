@@ -1,0 +1,10 @@
+digraph FichasJugador{
+rankdir="LR";
+node0 [label="e"];
+node1 [label="n"];
+node2 [label="d"];
+node3 [label="c"];
+node4 [label="s"];
+node5 [label="e"];
+node6 [label="r"];
+node0 -> node1;node1 -> node0;node1 -> node2;node2 -> node1;node2 -> node3;node3 -> node2;node3 -> node4;node4 -> node3;node4 -> node5;node5 -> node4;node5 -> node6;node6 -> node5;}

@@ -24,6 +24,8 @@ public:
 	void crearJugador(string nombre) {
 		Jugador* nuevo = new Jugador();
 		nuevo->setUsuario(nombre);
+		NodoPuntaje* nuevoPuntaje = new NodoPuntaje();
+		nuevo->setNodoPuntaje(nuevoPuntaje);
 		if (arbolVacio())
 		{
 			raiz = nuevo;
@@ -31,6 +33,32 @@ public:
 		else {
 			insertar(raiz, nuevo);
 		}
+	}
+	Jugador* buscarJugador(string nombre, Jugador* actual) {
+		int resultado = orden(actual->getUsuario(), nombre);
+		if (resultado == 0)
+		{
+			return actual;
+		}
+		else if (resultado > 0)
+		{
+			if (actual->getIzquierda() != NULL)
+			{
+				return buscarJugador(nombre, actual->getIzquierda());
+			}
+			else { return NULL; }
+		}
+		else if (resultado < 0)
+		{
+			if (actual->getDerecha() != NULL)
+			{
+				return buscarJugador(nombre, actual->getDerecha());
+			}
+			else { return NULL; }
+		}
+	}
+	Jugador* iniciarBusqueda(string buscar) {
+		return buscarJugador(buscar, raiz);
 	}
 	void insertar(Jugador* actual, Jugador* nuevo) {
 		int resultado = orden(actual->getUsuario(), nuevo->getUsuario());
@@ -102,5 +130,8 @@ public:
 			grafica += graficar(actual->getDerecha());
 		}
 		return grafica;
+	}
+	Jugador* devolverRaiz() {
+		return raiz;
 	}
 };

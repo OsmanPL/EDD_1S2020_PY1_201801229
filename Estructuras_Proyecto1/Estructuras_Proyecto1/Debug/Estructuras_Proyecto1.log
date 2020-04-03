@@ -1,6 +1,9 @@
 ﻿  Estructuras_Proyecto1.cpp
 C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Diccionario.h(62): warning C4715: 'Diccionario::buscar': no todas las rutas de acceso de control devuelven un valor
-C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Tablero.h(62): warning C4715: 'Tablero::devolverFila': no todas las rutas de acceso de control devuelven un valor
+C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\FichasJugador.h(58): warning C4715: 'FichasJugador::buscar': no todas las rutas de acceso de control devuelven un valor
 C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Tablero.h(74): warning C4715: 'Tablero::devolverColumna': no todas las rutas de acceso de control devuelven un valor
+C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Tablero.h(62): warning C4715: 'Tablero::devolverFila': no todas las rutas de acceso de control devuelven un valor
+C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\FichasJugador.h(25): warning C4715: 'FichasJugador::listaVacia': no todas las rutas de acceso de control devuelven un valor
+C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\ArbolJugador.h(59): warning C4715: 'ArbolJugador::buscarJugador': no todas las rutas de acceso de control devuelven un valor
 C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\ColaLetras.h(23): warning C4715: 'ColaLetras::listaVacia': no todas las rutas de acceso de control devuelven un valor
   Estructuras_Proyecto1.vcxproj -> C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Debug\Estructuras_Proyecto1.exe

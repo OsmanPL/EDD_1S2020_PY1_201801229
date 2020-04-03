@@ -45,12 +45,12 @@ public:
 			}
 			else {
 				while (r == 0) {
-					if (aux != NULL)
+					if (aux->getSiguiente() != NULL && aux->getPuntaje()!=NULL)
 					{
 						if (puntaje >= aux->getPuntaje())
 						{
-							nuevo->setSiguiente(aux->getSiguiente());
-							aux->setSiguiente(nuevo);
+							temporal->setSiguiente(nuevo);
+							nuevo->setSiguiente(aux);
 							r = 1;
 						}
 						else {
@@ -59,7 +59,17 @@ public:
 						}
 					}
 					else {
-						temporal->setSiguiente(nuevo);
+						if (puntaje >= aux->getPuntaje())
+						{
+							temporal->setSiguiente(nuevo);
+							nuevo->setSiguiente(aux);
+							r = 1;
+						}
+						else {
+
+							aux->setSiguiente(nuevo);
+						}
+						r = 1;
 					}
 				}
 			}
@@ -74,7 +84,7 @@ public:
 		string grafica = "digraph PuntajeJugador" + nombrejugador + "{\nrankdir=\u0022LR\u0022;\n";
 		while (aux !=NULL)
 		{
-			grafica += "node%i [label=\u0022%i\u0022];\n",i,aux->getPuntaje();
+			grafica += "node"+to_string(i)+" [label=\u0022"+to_string(aux->getPuntaje())+"\u0022];\n";
 			i++;
 			aux = aux->getSiguiente();
 		}
@@ -85,7 +95,7 @@ public:
 		{
 			if (aux->getSiguiente()!=NULL)
 			{
-				grafica += "node%i -> node%i;\n", j, l;
+				grafica += "node"+to_string(j)+" -> node"+to_string(l)+";\n", j, l;
 			}
 			j++;
 			l++;
@@ -105,5 +115,8 @@ public:
 		archivo.close();
 
 		system("dot -Tjpg ListaPuntajes.txt -o ListaPuntajes.jpg");
+	}
+	NodoPuntaje* retornrPrimero() {
+		return primero;
 	}
 };

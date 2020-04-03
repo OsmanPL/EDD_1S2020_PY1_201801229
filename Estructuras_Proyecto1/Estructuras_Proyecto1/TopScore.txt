@@ -1,0 +1,12 @@
+digraph TopScore{
+rankdir="LR";
+node0 [label="osman - 666"];
+node1 [label="jessi - 100"];
+node2 [label="kevin - 45"];
+node3 [label="avalos - 12"];
+node4 [label="samuel - 3"];
+node0 -> node1;
+node1 -> node2;
+node2 -> node3;
+node3 -> node4;
+}

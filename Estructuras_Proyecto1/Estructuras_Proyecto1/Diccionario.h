@@ -67,7 +67,7 @@ public:
 		if (aux!=NULL)
 		{
 			do {
-				grafica += "node%i [label=\u0022%s\u0022];",i,aux->getPalabra();
+				grafica += "node"+ to_string(i) +" [label=\u0022 "+aux->getPalabra()+" \u0022];";
 				i++;
 				aux = aux->getSiguiente();
 			} while (aux!=primero);
@@ -80,12 +80,12 @@ public:
 			do {
 				if (j == ultimo) {
 
-					grafica += "node%i -> node0 ;\n",j;
-					grafica += "node0 -> node%i ;\n",j;
+					grafica += "node"+ to_string(j) +" -> node0 ;\n",j;
+					grafica += "node0 -> node"+ to_string(j) +" ;\n",j;
 				}
 				else {
-					grafica += "node%i -> node%i ;\n",j,l;
-					grafica += "node%i -> node%i ;\n", l, j;
+					grafica += "node"+ to_string(j) +" -> node"+ to_string(l) +" ;\n",j,l;
+					grafica += "node"+ to_string(l) +" -> node"+ to_string(j) +" ;\n", l, j;
 				}
 				j++;
 				l++;

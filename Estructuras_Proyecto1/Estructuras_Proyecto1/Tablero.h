@@ -12,11 +12,12 @@ private:
 
 public:
 
-	NodoMatriz* raiz = new NodoMatriz();
+	NodoMatriz* raiz;
 	int tx = 0;
 	int ty = 0;
 
 	void iniciartablero() {
+		raiz = new NodoMatriz();
 		raiz->setY(-1);
 		raiz->setX(-1);
 	}
@@ -239,20 +240,33 @@ public:
 		}
 		else {
 			NodoMatriz* temporal = aux;
-			aux = aux->getAbajo();
 			while (agregar)
 			{
-				if (aux!=NULL)
+				if (aux->getAbajo()!=NULL)
 				{
 					if (fila == temporal->getX())
 					{
-						nodo->setAbajo(temporal->getAbajo());
-						nodo->setArriba(temporal->getArriba());
-						temporal->getArriba()->setAbajo(nodo);
-						temporal->getAbajo()->setArriba(nodo);
+						if (temporal->getAbajo()!=NULL && temporal->getArriba()!=NULL)
+						{
+							nodo->setAbajo(temporal->getAbajo());
+							nodo->setArriba(temporal->getArriba());
+							temporal->getArriba()->setAbajo(nodo);
+							temporal->getAbajo()->setArriba(nodo);
+						}
+						else if (temporal->getAbajo()!=NULL && temporal->getArriba()==NULL)
+						{
+							nodo->setAbajo(temporal->getAbajo());
+							temporal->getAbajo()->setArriba(nodo);
+						}
+						else if (temporal->getAbajo()==NULL && temporal->getArriba()!=NULL)
+						{
+							nodo->setArriba(temporal->getArriba());
+							temporal->getArriba()->setAbajo(nodo);
+						}
+						temporal = NULL;
 						agregar = false;
 					}
-					else if (fila > temporal->getX() && fila<aux->getX())
+					else if (fila > temporal->getX() && fila<temporal->getAbajo()->getX())
 					{
 						temporal->setAbajo(nodo);
 						nodo->setArriba(temporal);
@@ -260,7 +274,7 @@ public:
 						nodo->setAbajo(aux);
 						agregar = false;
 					}
-					else if (fila < temporal->getX() && fila > temporal->getArriba()->getX())
+					else if (fila < temporal->getX())
 					{
 						temporal->getArriba()->setAbajo(nodo);
 						nodo->setArriba(temporal->getArriba());
@@ -274,8 +288,39 @@ public:
 					}
 				}
 				else {
-					temporal->setAbajo(nodo);
-					nodo->setArriba(temporal);
+					if (fila == temporal->getX())
+					{
+						if (temporal->getAbajo() != NULL && temporal->getArriba() != NULL)
+						{
+							nodo->setAbajo(temporal->getAbajo());
+							nodo->setArriba(temporal->getArriba());
+							temporal->getArriba()->setAbajo(nodo);
+							temporal->getAbajo()->setArriba(nodo);
+						}
+						else if (temporal->getAbajo() != NULL && temporal->getArriba() == NULL)
+						{
+							nodo->setAbajo(temporal->getAbajo());
+							temporal->getAbajo()->setArriba(nodo);
+						}
+						else if (temporal->getAbajo() == NULL && temporal->getArriba() != NULL)
+						{
+							nodo->setArriba(temporal->getArriba());
+							temporal->getArriba()->setAbajo(nodo);
+						}
+						temporal = NULL;
+						agregar = false;
+					}
+					else if (fila < temporal->getX())
+					{
+						temporal->getArriba()->setAbajo(nodo);
+						nodo->setArriba(temporal->getArriba());
+						temporal->setArriba(nodo);
+						nodo->setAbajo(temporal);
+					}
+					else {
+						temporal->setAbajo(nodo);
+						nodo->setArriba(temporal);
+					}
 					agregar = false;
 				}
 			}
@@ -292,20 +337,32 @@ public:
 		}
 		else {
 			NodoMatriz* temporal = aux;
-			aux = aux->getDerecha();
 			while (agregar)
 			{
-				if (aux != NULL)
+				if (aux->getDerecha() != NULL)
 				{
 					if (columna == temporal->getY())
 					{
-						nodo->setDerecha(temporal->getDerecha());
-						nodo->setIzquierda(temporal->getIzquierda());
-						temporal->getIzquierda()->setDerecha(nodo);
-						temporal->getDerecha()->setIzquierda(nodo);
+						if (temporal->getDerecha() != NULL && temporal->getIzquierda() != NULL)
+						{
+							nodo->setDerecha(temporal->getDerecha());
+							nodo->setIzquierda(temporal->getIzquierda());
+							temporal->getIzquierda()->setDerecha(nodo);
+							temporal->getDerecha()->setIzquierda(nodo);
+						}
+						else if (temporal->getDerecha() != NULL && temporal->getIzquierda() == NULL)
+						{
+							nodo->setDerecha(temporal->getDerecha());
+							temporal->getDerecha()->setIzquierda(nodo);
+						}
+						else if (temporal->getDerecha() == NULL && temporal->getIzquierda() != NULL)
+						{
+							nodo->setIzquierda(temporal->getIzquierda());
+							temporal->getIzquierda()->setDerecha(nodo);
+						}
 						agregar = false;
 					}
-					else if (columna > temporal->getY() && columna < aux->getY())
+					else if (columna > temporal->getY() && columna < temporal->getDerecha()->getY())
 					{
 						temporal->setDerecha(nodo);
 						nodo->setIzquierda(temporal);
@@ -313,7 +370,7 @@ public:
 						nodo->setDerecha(aux);
 						agregar = false;
 					}
-					else if (columna < temporal->getY() && columna > temporal->getIzquierda()->getY())
+					else if (columna < temporal->getY())
 					{
 						temporal->getIzquierda()->setDerecha(nodo);
 						nodo->setIzquierda(temporal->getIzquierda());
@@ -327,66 +384,161 @@ public:
 					}
 				}
 				else {
-					temporal->setDerecha(nodo);
-					nodo->setIzquierda(temporal);
+					if (columna == temporal->getY())
+					{
+						if (temporal->getDerecha() != NULL && temporal->getIzquierda() != NULL)
+						{
+							nodo->setDerecha(temporal->getDerecha());
+							nodo->setIzquierda(temporal->getIzquierda());
+							temporal->getIzquierda()->setDerecha(nodo);
+							temporal->getDerecha()->setIzquierda(nodo);
+						}
+						else if (temporal->getDerecha() != NULL && temporal->getIzquierda() == NULL)
+						{
+							nodo->setDerecha(temporal->getDerecha());
+							temporal->getDerecha()->setIzquierda(nodo);
+						}
+						else if (temporal->getDerecha() == NULL && temporal->getIzquierda() != NULL)
+						{
+							nodo->setIzquierda(temporal->getIzquierda());
+							temporal->getIzquierda()->setDerecha(nodo);
+						}
+						agregar = false;
+					}
+					else if (columna < temporal->getY())
+					{
+						temporal->getIzquierda()->setDerecha(nodo);
+						nodo->setIzquierda(temporal->getIzquierda());
+						temporal->setIzquierda(nodo);
+						nodo->setDerecha(temporal);
+					}
+					else {
+						temporal->setDerecha(nodo);
+						nodo->setIzquierda(temporal);
+					}
 					agregar = false;
 				}
 			}
 		}
 	}
 	void graficar() {
-		string grafica = "digraph Tablero{\n";
-		NodoMatriz* columna = raiz->getDerecha();
-		NodoMatriz* fila = raiz->getAbajo();
-		int i=0;
-		grafica += "subgraph N%i{\nrankdir=\u0022LR\u0022;\n Raiz;\n",i;
-		i++;
-		//columnas raiz
-		while (columna!=NULL)
-		{
-			grafica += "C%i;", columna->getY();
-			columna = columna->getDerecha();
-		}
-		grafica += "}\n";
+		string grafica = "digraph Tablero{\nrankdir=\u0022LR\u0022;\n";
+		NodoMatriz* columna = new NodoMatriz(); 
+		NodoMatriz* fila = new NodoMatriz();
+		string ranksame = "";
 
-		while (fila != NULL) {
-			grafica += "subgraph N%i{\nrankdir=\u0022LR\u0022;\n F%i;\n",i,fila->getX();
-			columna = fila->getDerecha();
-			i++;
-			while (columna!=NULL)
-			{
-				grafica += "node%i%i[label=\u0022%c\u0022];\n",columna->getX(),columna->getY(),columna->getNodo()->getCaracter();
-				columna = columna->getDerecha();
-			}
-			grafica += "}\n";
+		NodoMatriz* fin = new NodoMatriz();
+		int i = 0;
+		grafica += "Raiz[shape=box;style=filled;pos=\u0022-1,-1!\u0022];\n";
+		if (raiz->getDerecha() != NULL && raiz->getAbajo() != NULL)
+		{
+			columna = raiz->getDerecha();
+			fila = raiz->getAbajo();
+		}
+		//columnas raiz
+		while (fila != NULL)
+		{
+			grafica += "F"+to_string(fila->getX())+"[shape=box;style=filled;pos=\u0022-1,"+ to_string(fila->getX()) +"!\u0022];\n";
 			fila = fila->getAbajo();
 		}
-		grafica += "Raiz -> C%;\n Raiz -> F%;\n", raiz->getDerecha()->getY(), raiz->getAbajo()->getX();
+
+		fila = raiz->getAbajo();
+		grafica += "Raiz -> F" + to_string(fila->getX()) + ";\n";
+		grafica += "F" + to_string(fila->getX()) + "->Raiz;\n";
+		while (fila != NULL)
+		{
+			if (fila->getAbajo()!=NULL)
+			{
+				grafica += "F" + to_string(fila->getX()) + " -> F" + to_string(fila->getAbajo()->getX()) + ";\n";
+				grafica += "F" + to_string(fila->getAbajo()->getX()) + " -> F" + to_string(fila->getX()) + ";\n";
+			}
+			if (fila->getDerecha()!=NULL)
+			{
+				grafica += "F" + to_string(fila->getX()) + " -> X" + to_string(fila->getDerecha()->getX()) + "Y"+to_string(fila->getDerecha()->getY())+";\n";
+				grafica += "X" + to_string(fila->getDerecha()->getX()) + "Y" + to_string(fila->getDerecha()->getY()) + " -> F" + to_string(fila->getX()) + ";\n";
+			}
+			fila = fila->getAbajo();
+		}
+		i=2;
+		NodoMatriz* ultimo = new NodoMatriz();
+		while (columna != NULL) {
+			grafica += "C" + to_string(columna->getY()) + "[shape=box;style=filled;pos=\u0022" + to_string(columna->getY()) +",-1!\u0022];\n";
+			
+			ultimo = columna;
+			columna = columna->getDerecha();
+			i++;
+		}
 		columna = raiz->getDerecha();
-		
-		//apuntar columnas
+		grafica += "Raiz -> C" + to_string(columna->getY()) + ";\n";
+		grafica += "C" + to_string(columna->getY()) + "->Raiz;\n";
 		while (columna!=NULL)
 		{
-			if (columna->getDerecha()!=NULL)
+			if (columna->getDerecha() != NULL)
 			{
-				grafica += "C% -> C%;\n",columna->getY(),columna->getDerecha()->getY();
-			}
-			if (columna->getAbajo() != NULL)
-			{
-				grafica += "C% -> node%i%i;\n", columna->getY(), columna->getAbajo()->getX(), columna->getAbajo()->getY();
-			}
-			if (columna->getIzquierda() != NULL)
-			{
-				if (columna->getIzquierda()==raiz)
-				{
-					grafica += "C% -> Raiz;\n", columna->getY();
-				}
-				else {
-					grafica += "C% -> C%;\n", columna->getY(), columna->getIzquierda()->getY();
-				}
+				grafica += "C" + to_string(columna->getY()) + " -> C" + to_string(columna->getDerecha()->getY()) + ";\n";
+				grafica += "C" + to_string(columna->getDerecha()->getY()) + " -> C" + to_string(columna->getY()) + ";\n";
 			}
 			columna = columna->getDerecha();
 		}
+		i = 2;
+		columna = raiz->getDerecha();
+		while (columna != NULL)
+		{
+			if (columna->getAbajo()!=NULL)
+			{
 
+				grafica += "C" + to_string(columna->getY()) + " -> X" + to_string(columna->getAbajo()->getX()) + "Y" + to_string(columna->getAbajo()->getY()) + ";\n";
+				grafica += "X" + to_string(columna->getAbajo()->getX()) + "Y" + to_string(columna->getAbajo()->getY()) + " -> C" + to_string(columna->getY()) + ";\n";
+
+				fila = columna->getAbajo();
+
+				while (fila!=NULL)
+				{
+					if (fila->getNodo()!=NULL)
+					{
+						grafica += "X" + to_string(fila->getX()) + "Y" + to_string(fila->getY()) + "[shape=box;style=filled;label=\u0022" + fila->getNodo()->getCaracter() + "\u0022;pos=\u0022"+ to_string(fila->getY()) +","+ to_string(fila->getX()) +"!\u0022];\n";
+					}
+					else {
+						grafica += "X" + to_string(fila->getX()) + "Y" + to_string(fila->getY()) + "[shape=box;style=filled;label=\u0022" + fila->getEstado() + "\u0022; pos=\u0022" + to_string(fila->getY()) + "," + to_string(fila->getX()) + "!\u0022];\n";
+					}
+
+					if (fila->getAbajo() != NULL)
+					{
+						grafica += "X" + to_string(fila->getX()) + "Y"+ to_string(fila->getY()) +"-> X" + to_string(fila->getAbajo()->getX()) + "Y" + to_string(fila->getAbajo()->getY()) + ";\n";
+						grafica += "X" + to_string(fila->getAbajo()->getX()) + "Y"+to_string(fila->getAbajo()->getY())+" -> X" + to_string(fila->getX()) + "Y" + to_string(fila->getY()) + ";\n";
+					}
+					if (fila->getDerecha() != NULL)
+					{
+						grafica += "X" + to_string(fila->getX()) + "Y"+ to_string(fila->getY()) +" -> X" + to_string(fila->getDerecha()->getX()) + "Y" + to_string(fila->getDerecha()->getY()) + ";\n";
+						grafica += "X" + to_string(fila->getDerecha()->getX()) + "Y" + to_string(fila->getDerecha()->getY()) + " -> X" + to_string(fila->getX()) + "Y" + to_string(fila->getY()) + ";\n";
+					}
+					if (fila->getX()==fin->getX())
+					{
+
+						fin = fila;
+					}
+					fila = fila->getAbajo();
+				}
+			}
+			i++;
+			columna = columna->getDerecha();
+		}
+		fila = raiz->getAbajo();
+		
+		
+		grafica += "}\n";
+		ofstream archivo;
+		archivo.open("Tablero.txt", ios::out);
+
+		if (archivo.fail())
+		{
+			cout << "Error: no se pudo abrir el archivo";
+			exit(1);
+		}
+		archivo << grafica;
+
+		archivo.close();
+
+		system("dot -Kfdp -n -Tjpg -o Tablero.jpg Tablero.txt");
 	}
 };

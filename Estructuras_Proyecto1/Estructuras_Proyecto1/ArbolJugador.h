@@ -11,7 +11,7 @@ class ArbolJugador {
 private:
 public:
 	Jugador* raiz;
-	
+	int i = 0;
 	bool arbolVacio() {
 		if (raiz!=NULL)
 		{
@@ -40,17 +40,7 @@ public:
 		}
 		else if (resultado > 0)
 		{
-			if (actual->getDerecha()!=NULL)
-			{
-				insertar(actual->getDerecha(), nuevo);
-			}
-			else {
-				actual->setDerecha(nuevo);
-			}
-		}
-		else if (resultado < 0)
-		{
-			if (actual->getIzquierda() != NULL)
+			if (actual->getIzquierda()!=NULL)
 			{
 				insertar(actual->getIzquierda(), nuevo);
 			}
@@ -58,16 +48,26 @@ public:
 				actual->setIzquierda(nuevo);
 			}
 		}
+		else if (resultado < 0)
+		{
+			if (actual->getDerecha() != NULL)
+			{
+				insertar(actual->getDerecha(), nuevo);
+			}
+			else {
+				actual->setDerecha(nuevo);
+			}
+		}
 	}
 	int orden(string actual, string nuevo) {
-		const char* nodoviejo = actual.c_str;
-		const char* nodonuevo = nuevo.c_str;
+		const char* nodoviejo = &actual[0];
+		const char* nodonuevo = &nuevo[0];
 		return strcmp(nodoviejo, nodonuevo);
 	}
 	void iniciarGrafica() {
 		Jugador* aux = raiz;
 		string grafica = "digraph Jugadores{\n";
-		graficar(aux,grafica,0);
+		grafica += graficar(aux);
 		grafica += "}";
 		ofstream archivo;
 		archivo.open("ArbolJugadores.txt", ios::out);
@@ -83,22 +83,24 @@ public:
 
 		system("dot -Tjpg ArbolJugadores.txt -o ArbolJugadores.jpg");
 	}
-	void graficar(Jugador* actual, string grafica, int i) {
-		int j = i;
-		grafica += "node%i label[\u0022%s\u0022];\n",i,actual->getUsuario();
+	string graficar(Jugador* actual) {
+		string grafica = "";
+		int l = i;
+		grafica += "node"+ to_string(l) +" [label=\u0022"+actual->getUsuario()+"\u0022];\n";
 		if (actual->getIzquierda()!=NULL)
 		{
 
-			j++;
-			grafica += "node%i -> node%i;\n",i,j;
-			graficar(actual->getIzquierda(),grafica,j);
+			i++;
+			grafica += "node"+ to_string(l) +" -> node"+ to_string(i) +";\n";
+			
+			grafica += graficar(actual->getIzquierda());
 		}
 		if (actual->getDerecha() != NULL)
 		{
-			j++;
-			grafica += "node%i -> node%i;\n", i, j;
-			graficar(actual->getDerecha(), grafica, j);
+			i++;
+			grafica += "node"+ to_string(l) +" -> node"+ to_string(i) +";\n";
+			grafica += graficar(actual->getDerecha());
 		}
-
+		return grafica;
 	}
 };

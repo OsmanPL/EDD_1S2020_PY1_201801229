@@ -1,0 +1,15 @@
+digraph Diccionario{
+ rankdir="LR";
+node0 [label=" avalos "];node1 [label=" puto "];node2 [label=" reto "];node3 [label=" gay "];node4 [label=" oso "];node5 [label=" hola "];node0 -> node1 ;
+node1 -> node0 ;
+node1 -> node2 ;
+node2 -> node1 ;
+node2 -> node3 ;
+node3 -> node2 ;
+node3 -> node4 ;
+node4 -> node3 ;
+node4 -> node5 ;
+node5 -> node4 ;
+node5 -> node0 ;
+node0 -> node5 ;
+}

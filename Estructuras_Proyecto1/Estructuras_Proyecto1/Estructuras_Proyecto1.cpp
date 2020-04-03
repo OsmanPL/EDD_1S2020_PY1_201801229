@@ -19,10 +19,174 @@ using namespace std;
 
 
 Diccionario* nuevoDiccionario = new Diccionario();
+ColaLetras* nuevaCola = new ColaLetras();
+ArbolJugador* arbolJugadores = new ArbolJugador();
+ListaTopJugadores* listTop = new ListaTopJugadores();
+Tablero* tablero = new Tablero();
+
+
+void menu() {
+    std::cout << "Menu\n";
+    std::cout << "1. Probar Diccionario\n";
+    std::cout << "2. Cola Letras\n";
+    std::cout << "3. Matriz Dispersa\n";
+    std::cout << "4. Arbol Binario\n";
+    std::cout << "5. Juego\n";
+    std::cout << "6. Top Jugadores\n";
+    std::cout << "7. Agregar Puntaje a Jugador\n";
+    std::cout << "8. Fichas de Jugador\n";
+    std::cout << "9. Salir\n";
+}
+void MenuDiccionario() {
+    std::cout << "Menu Diccionrio\n";
+    std::cout << "1. Agregar\n";
+    std::cout << "2. Buscar\n";
+    std::cout << "3. Graficar\n";
+    std::cout << "4. Regresar\n";
+}
+void MenuCola() {
+    std::cout << "Menu Cola\n";
+    std::cout << "1. Revolver\n";
+    std::cout << "2. Graficar\n";
+    std::cout << "3. Desencolar\n";
+    std::cout << "4. Regresar\n";
+}
+void MenuArbol() {
+    std::cout << "Menu Arbol\n";
+    std::cout << "1. Agregar\n";
+    std::cout << "2. Graficar\n";
+    std::cout << "3. Regresar\n";
+}
+void MenuTablero() {
+    std::cout << "Menu Tablero\n";
+    std::cout << "1. Dimensiones\n";
+    std::cout << "2. Dobles\n";
+    std::cout << "3. Triples\n";
+    std::cout << "4. Agregar Letra\n";
+    std::cout << "5. Graficar\n";
+    std::cout << "6. Regresar\n";
+}
+void diccionario() {
+    int opcion = 0;
+    do
+    {
+        MenuDiccionario();
+        cin >> opcion;
+        switch (opcion)
+        {
+        case 1:
+        {
+            string palabra;
+            cout << "Escriba su palabra a para agregar: \n";
+            cin >> palabra;
+            nuevoDiccionario->insertar(palabra);
+        }break;
+        case 2:
+        {
+            string palabra;
+            cout << "Escriba su palabra a para buscar: \n";
+            cin >> palabra;
+            NodoDiccionario* encontrada = nuevoDiccionario->buscar(palabra);
+            cout << "La palabra es: " << encontrada->getPalabra() << "\n";
+        }break;
+        case 3:
+        {
+            nuevoDiccionario->grficar();
+        }break;
+        }
+    } while (opcion != 4);
+}
+void colaLetras() {
+    int opcion = 0;
+    do
+    {
+        MenuCola();
+        cin >> opcion;
+        switch (opcion)
+        {
+        case 1: {
+            nuevaCola->revolver();
+        }break;
+        case 2: {
+            nuevaCola->graficarCola();
+        }break;
+        case 3: {
+            NodoCola* desencolo = nuevaCola->desencolar();
+            cout << desencolo->getCaracter() << " - " << desencolo->getPunteo() << "\n";
+        }break;
+        }
+    } while (opcion != 4);
+}
+void opcionesArbol() {
+    int opcion = 0;
+    do
+    {
+        MenuArbol();
+        cin >> opcion;
+        switch (opcion)
+        {
+        case 1: {
+            string nombre;
+            cout << "Nombre del ugadores: ";
+            cin >> nombre;
+            arbolJugadores->crearJugador(nombre);
+        }break;
+        case 2: {
+            arbolJugadores->iniciarGrafica();
+        }break;
+        }
+    } while (opcion != 3);
+}
+
+void opcionesTablero() {
+    int opcion = 0;
+    do
+    {
+        MenuTablero();
+        cin >> opcion;
+        switch (opcion)
+        {
+        case 1: {
+            int dimensiones = 0;
+            cout << "Dimensiones del tablero: ";
+            cin >> dimensiones;
+            tablero->iniciartablero();
+            tablero->generarTablero(dimensiones);
+        }break;
+        case 2: {
+            int x, y;
+            cout << "Posicion x: ";
+            cin >> x;
+            cout << "\nPosicion y: ";
+            cin >> y;
+            tablero->generarDobles(x, y);
+        }break;
+        case 3: {
+            int x, y;
+            cout << "Posicion x: ";
+            cin >> x;
+            cout << "\nPosicion y: ";
+            cin >> y;
+            tablero->generarTriples(x, y);
+        }break;
+        case 4: {
+            int x, y;
+            cout << "Posicion x: ";
+            cin >> x;
+            cout << "\nPosicion y: ";
+            cin >> y;
+            tablero->agregarFicha(x, y, nuevaCola->desencolar());
+        }break;
+        case 5: {
+            tablero->graficar();
+        }break;
+        }
+    } while (opcion != 6);
+}
 
 int main()
 {
-    int opcion;
+    int opcion=0;
 
     do
     {
@@ -33,46 +197,26 @@ int main()
         case 1:
         {
             //Diccinario
-            
+            diccionario();
 
         }break;
-
-        }
-    } while (opcion!=6);
-}
-
-void menu() {
-    std::cout << "Menu\n";
-    std::cout << "1. Probar Diccionario\n";
-    std::cout << "2. Cola Letras\n";
-    std::cout << "3. Matriz Dispersa\n";
-    std::cout << "4. Arbol Binario\n";
-    std::cout << "5. Juego\n";
-    std::cout << "6. Salir\n";
-}
-void MenuDiccionario() {
-    std::cout << "Menu Diccionrio\n";
-    std::cout << "1. Agregar\n";
-    std::cout << "2. Buscar\n";
-    std::cout << "3. Graficar\n";
-    std::cout << "4. Regresar\n";
-}
-void diccionario() {
-    int opcion;
-    do
-    {
-        switch (opcion)
+        case 2:
         {
-        case 1:
-        {
-            string palabra;
-            cout << "Escriba su palabra a para agregar: ";
-            cin >> palabra;
-            nuevoDiccionario->insertar(palabra);
+            //Diccinario
+            colaLetras();
+
         }break;
+        case 3: {
+            opcionesTablero();
         }
-    } while (opcion!=4);
+        case 4: {
+            opcionesArbol();
+        }
+        }
+    } while (opcion!=9);
 }
+
+
 
 // Ejecutar programa: Ctrl + F5 o menú Depurar > Iniciar sin depurar
 // Depurar programa: F5 o menú Depurar > Iniciar depuración

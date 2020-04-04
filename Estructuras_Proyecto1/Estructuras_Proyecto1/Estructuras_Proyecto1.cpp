@@ -2,6 +2,7 @@
 //
 
 #include <iostream>
+#include <fstream>
 #include "Diccionario.h"
 #include "ArbolJugador.h"
 #include "ColaLetras.h"
@@ -14,7 +15,9 @@
 #include "NodoMatriz.h"
 #include "NodoPuntaje.h"
 #include "Tablero.h"
-
+#include "json.hpp"
+#include <typeinfo>
+using json = nlohmann::json;
 using namespace std;
 
 
@@ -36,7 +39,8 @@ void menu() {
     std::cout << "6. Top Jugadores\n";
     std::cout << "7. Puntaje a Jugador\n";
     std::cout << "8. Fichas de Jugador\n";
-    std::cout << "9. Salir\n";
+    std::cout << "9. Archivo Json\n";
+    std::cout << "10. Salir\n";
 }
 void MenuDiccionario() {
     std::cout << "Menu Diccionrio\n";
@@ -62,7 +66,7 @@ void MenuJuego() {
     std::cout << "Menu Juego\n";
     std::cout << "1. Cambiar Ficha\n";
     std::cout << "2. Ingresar Palabra\n";
-    std::cout << "3. Pasar\n";
+    std::cout << "3. Ver Mano\n";
     std::cout << "4. Sacar Ficha Cola\n";
     std::cout << "5. Graficar Tablero\n";
     std::cout << "6. Salir del Juego\n";
@@ -329,7 +333,9 @@ void opcionesManos() {
     } while (opcion != 3);
 }
 void iniciarJuego() {
+    int puntaje_temporal = 0;
     cout << "-----------------Scrable Iniciado-----------------------\n";
+    nuevaCola->revolver();
     Jugador* jugador1 = new Jugador();
     string nombre1 = "";
     cout << "Seleccine Jugador1: ";
@@ -337,10 +343,11 @@ void iniciarJuego() {
     jugador1 = arbolJugadores->iniciarBusqueda(nombre1);
     while (jugador1==NULL)
     {
-        cout << "Usuario no existe\nSeleccione Jugador1: ";
+        cout << "\nUsuario no existe\nSeleccione Jugador1: ";
         cin >> nombre1;
         jugador1 = arbolJugadores->iniciarBusqueda(nombre1);
     }
+
     Jugador* jugador2 = new Jugador();
     string nombre2 = "";
     cout << "\nSeleccine Jugador2: ";
@@ -348,14 +355,18 @@ void iniciarJuego() {
     jugador2 = arbolJugadores->iniciarBusqueda(nombre2);
     while (jugador2 == NULL)
     {
-        cout << "Usuario no existe\nSeleccione Jugador2: ";
+        cout << "\nUsuario no existe\nSeleccione Jugador2: ";
         cin >> nombre2;
         jugador2 = arbolJugadores->iniciarBusqueda(nombre2);
     }
+    int puntaje_jugador1 = 0;
+    int puntaje_jugador2 = 0;
+    int turnoInicial = true;
     int turno = rand() % 2 +1;
     int opcion = 0;
     fj1 = new FichasJugador();
     fj2 = new FichasJugador();
+
     if (nuevaCola!=NULL)
     {
         for (int i = 0; i < 7; i++)
@@ -367,7 +378,7 @@ void iniciarJuego() {
             
             if (turno == 1)
             {
-                cout << "Turno Jugador1 - " + jugador1->getUsuario()+"\n";
+                cout << "\nTurno Jugador1 - " + jugador1->getUsuario()+" - "+to_string(puntaje_jugador1)+"\n";
                 MenuJuego();
                 cin >> opcion;
                 switch (opcion)
@@ -381,7 +392,7 @@ void iniciarJuego() {
                         cout << "Seleccine ficha a cambiar: ";
                         cin >> c;
                         NodoCola* buscar = fj1->buscar(c);
-                        if (buscar!=NULL)
+                        if (buscar != NULL)
                         {
                             nuevaCola->encolar(buscar->getCaracter(), buscar->getPunteo());
                             fj1->borrar(buscar);
@@ -390,27 +401,523 @@ void iniciarJuego() {
                         else {
                             cout << "\nEsa Ficha No Existe\n";
                         }
+                        fj1->graficar();
                         cout << "¿Quiere seguir Cambiando Ficha? Presione 1. No o 2. Si: ";
                         cin >> j;
                     } while (j != 1);
+                    turno = 2;
                 }break;
                 case 2: {
+                    int x = 0;
+                    int y = 0;
+                    int recorrido = 0;
+                    string palabra = "";
+                    cout << "\nINgrese la Palabra: ";
+                    cin >> palabra;
+                    NodoDiccionario* buscarPalabra = nuevoDiccionario->buscar(palabra);
+                    if (buscarPalabra!=NULL)
+                    {
+                        cout << "\nIngrese la Posicion Inicial en Fila: ";
+                        cin >> x;
+                        cout << "\nIngrese la Posicion Inicial en Columna: ";
+                        cin >> y;
+                        cout << "\nHacia donde quiere que vaya la palabra(1. Vertical 2. Horizontal): ";
+                        cin >> recorrido;
+                        if (recorrido == 1)
+                        {
+                            if (turnoInicial)
+                            {
+                                bool valido = false;
+                                puntaje_temporal = puntaje_jugador1;
 
+                                for (int i = 0; i < palabra.length(); i++)
+                                {
+                                    NodoCola* buscarMano = fj1->buscar(palabra[i]);
+                                        bool sy = tablero->existeColumna(y);
+                                        bool sx = tablero->existeFila(x - i);
+                                        system("pause");
+                                        if (sy && sx && (x-i)>=0)
+                                        {
+                                            cout << palabra[i];
+                                            NodoMatriz* nodo = tablero->tieneNodo(x-i, y);
+                                            system("pause");
+                                            if (nodo!=NULL)
+                                            {
+
+                                                if (nodo->getNodo()!=NULL)
+                                                {
+
+                                                    if (nodo->getNodo()->getCaracter() == palabra[i])
+                                                    {
+                                                        if (nodo->getEstado() == "X2")
+                                                        {
+                                                            puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 2);
+                                                            valido = true;
+                                                        }
+                                                        else if (nodo->getEstado()=="X3")
+                                                        {
+                                                            puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 3);
+                                                            valido = true;
+                                                        }
+                                                        else {
+                                                            puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 1);
+                                                            valido = true;
+                                                        }
+                                                    }
+                                                    else {
+                                                        valido = false;
+                                                        break;
+                                                    }
+                                                }
+                                                else {
+                                                    if (buscarMano!=NULL)
+                                                    {
+                                                        if (nodo->getEstado() == "X2")
+                                                        {
+                                                            puntaje_temporal = puntaje_temporal + (buscarMano->getPunteo() * 2);
+                                                        }
+                                                        else if (nodo->getEstado() == "X3")
+                                                        {
+                                                            puntaje_temporal = puntaje_temporal + (buscarMano->getPunteo() * 3);
+                                                        }
+                                                        valido = true;
+                                                    }
+                                                    else {
+                                                        valido = false;
+                                                        break;
+                                                    }
+                                                    
+                                                }
+                                            }
+                                            else {
+                                                if (buscarMano != NULL)
+                                                {
+
+                                                    puntaje_temporal = puntaje_temporal + buscarMano->getPunteo();
+                                                    valido = true;
+                                                }
+                                                else {
+                                                    valido = false;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            valido = false;
+                                            break;
+                                        }
+                                }
+                                if (valido)
+                                {
+
+                                    turnoInicial = false;
+                                    puntaje_jugador1 = puntaje_temporal;
+                                    for (int i = 0; i < palabra.length(); i++)
+                                    {
+                                        NodoCola* buscarMano = fj1->buscar(palabra[i]);
+                                        bool sy = tablero->existeColumna(y);
+                                        bool sx = tablero->existeFila(x - i);
+                                        if (sy && sx && (x - i) >= 0)
+                                        {
+                                            NodoMatriz* nodo = tablero->tieneNodo(x-i, y);
+                                            if (nodo != NULL)
+                                            {
+                                                if (nodo->getNodo() != NULL)
+                                                {
+                                                    if (nodo->getNodo()->getCaracter() == palabra[i])
+                                                    {
+                                                    }
+                                                }
+                                                else {
+                                                    tablero->agregarFicha(x-i,y,buscarMano);
+                                                    fj1->borrar(buscarMano);
+                                                }
+                                            }
+                                            else {
+                                                tablero->agregarFicha(x - i, y, buscarMano);
+                                                fj1->borrar(buscarMano);
+                                            }
+                                        }
+                                    }
+                                }
+                                else {
+                                    cout << "HIzo mal algo en su turno\nya sea que la ficha no esta en su mano o la posicin de la palabra esta fuera del tablero\n pierde su turno\n";
+                                    system("pause");
+                                }
+                            }
+                            else {
+                                bool valido = false;
+                                puntaje_temporal = puntaje_jugador1;
+                                int valido2 = 0;
+                                for (int i = 0; i < palabra.length(); i++)
+                                {
+                                    NodoCola* buscarMano = fj1->buscar(palabra[i]);
+                                    bool sy = tablero->existeColumna(y);
+                                    bool sx = tablero->existeFila(x - i);
+                                    if (sy && sx && (x - i) >= 0)
+                                    {
+                                        NodoMatriz* nodo = tablero->tieneNodo(x-i, y);
+                                        if (nodo != NULL)
+                                        {
+                                            if (nodo->getNodo() != NULL)
+                                            {
+                                                if (nodo->getNodo()->getCaracter() == palabra[i])
+                                                {
+                                                    valido2++;
+                                                    if (nodo->getEstado() == "X2")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 2);
+                                                        valido = true;
+                                                    }
+                                                    else if (nodo->getEstado() == "X3")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 3);
+                                                        valido = true;
+                                                    }
+                                                    else {
+                                                        
+                                                        puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 1);
+                                                        valido = true;
+                                                    }
+                                                }
+                                                else {
+                                                    valido = false;
+                                                    break;
+                                                }
+                                            }
+                                            else {
+                                                if (buscarMano != NULL)
+                                                {
+                                                    if (nodo->getEstado() == "X2")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (buscarMano->getPunteo() * 2);
+                                                    }
+                                                    else if (nodo->getEstado() == "X3")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (buscarMano->getPunteo() * 3);
+                                                    }
+                                                    valido = true;
+                                                }
+                                                else {
+                                                    valido = false;
+                                                    break;
+                                                }
+
+                                            }
+                                        }
+                                        else {
+                                            if (buscarMano != NULL)
+                                            {
+
+                                                puntaje_temporal = puntaje_temporal + buscarMano->getPunteo();
+                                                valido = true;
+                                            }
+                                            else {
+                                                valido = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        valido = false;
+                                        break;
+                                    }
+                                }
+                                if (valido && valido2>0)
+                                {
+
+                                    turnoInicial = false;
+                                    puntaje_jugador1 = puntaje_temporal;
+                                    for (int i = 0; i < palabra.length(); i++)
+                                    {
+                                        NodoCola* buscarMano = fj1->buscar(palabra[i]);
+                                        bool sy = tablero->existeColumna(y);
+                                        bool sx = tablero->existeFila(x - i);
+                                        if (sy && sx && (x - i) >= 0)
+                                        {
+                                            NodoMatriz* nodo = tablero->tieneNodo(x - i, y);
+                                            if (nodo != NULL)
+                                            {
+                                                if (nodo->getNodo() != NULL)
+                                                {
+                                                    if (nodo->getNodo()->getCaracter() == palabra[i])
+                                                    {
+                                                    }
+                                                }
+                                                else {
+                                                    tablero->agregarFicha(x - i, y, buscarMano);
+                                                    fj1->borrar(buscarMano);
+                                                }
+                                            }
+                                            else {
+                                                tablero->agregarFicha(x - i, y, buscarMano);
+                                                fj1->borrar(buscarMano);
+                                            }
+                                        }
+                                    }
+                                }
+                                else {
+                                    cout << "HIzo mal algo en su turno\nya sea que la ficha no esta en su mano o la posicin de la palabra esta fuera del tablero\n pierde su turno\n";
+                                    system("pause");
+                                }
+                            }
+                        }
+                        else if (recorrido == 2) {
+                            if (turnoInicial)
+                            {
+                            bool valido = false;
+                            puntaje_temporal = puntaje_jugador1;
+
+                            for (int i = 0; i < palabra.length(); i++)
+                            {
+                                NodoCola* buscarMano = fj1->buscar(palabra[i]);
+                                bool sy = tablero->existeColumna(y+i);
+                                bool sx = tablero->existeFila(x);
+                                if (sy && sx && (y + i) >= 0)
+                                {
+                                    NodoMatriz* nodo = tablero->tieneNodo(x, y+i);
+                                    if (nodo != NULL)
+                                    {
+                                        if (nodo->getNodo() != NULL)
+                                        {
+                                            if (nodo->getNodo()->getCaracter() == palabra[i])
+                                            {
+                                                if (nodo->getEstado() == "X2")
+                                                {
+                                                    puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 2);
+                                                    valido = true;
+                                                }
+                                                else if (nodo->getEstado() == "X3")
+                                                {
+                                                    puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 3);
+                                                    valido = true;
+                                                }
+                                                else {
+                                                    puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 1);
+                                                    valido = true;
+                                                }
+                                            }
+                                            else {
+                                                valido = false;
+                                                break;
+                                            }
+                                        }
+                                        else {
+                                            if (buscarMano != NULL)
+                                            {
+                                                if (nodo->getEstado() == "X2")
+                                                {
+                                                    puntaje_temporal = puntaje_temporal + (buscarMano->getPunteo() * 2);
+                                                }
+                                                else if (nodo->getEstado() == "X3")
+                                                {
+                                                    puntaje_temporal = puntaje_temporal + (buscarMano->getPunteo() * 3);
+                                                }
+                                                valido = true;
+                                            }
+                                            else {
+                                                valido = false;
+                                                break;
+                                            }
+
+                                        }
+                                    }
+                                    else {
+                                        if (buscarMano != NULL)
+                                        {
+
+                                            puntaje_temporal = puntaje_temporal + buscarMano->getPunteo();
+                                            valido = true;
+                                        }
+                                        else {
+                                            valido = false;
+                                            break;
+                                        }
+                                    }
+                                }
+                                else {
+                                    valido = false;
+                                    break;
+                                }
+                            }
+                            if (valido)
+                            {
+                                turnoInicial = false;
+                                puntaje_jugador1 = puntaje_temporal;
+                                for (int i = 0; i < palabra.length(); i++)
+                                {
+                                    NodoCola* buscarMano = fj1->buscar(palabra[i]);
+                                    bool sy = tablero->existeColumna(y+i);
+                                    bool sx = tablero->existeFila(x);
+                                    if (sy && sx && (y+ i) >= 0)
+                                    {
+                                        NodoMatriz* nodo = tablero->tieneNodo(x, y+i);
+                                        if (nodo != NULL)
+                                        {
+                                            if (nodo->getNodo() != NULL)
+                                            {
+                                                if (nodo->getNodo()->getCaracter() == palabra[i])
+                                                {
+                                                    tablero->agregarFicha(x, y + i, nodo->getNodo());
+                                                }
+                                            }
+                                            else {
+                                                tablero->agregarFicha(x, y+i, buscarMano);
+                                                fj1->borrar(buscarMano);
+                                            }
+                                        }
+                                        else {
+                                            tablero->agregarFicha(x, y+i, buscarMano);
+                                            fj1->borrar(buscarMano);
+                                        }
+                                    }
+                                }
+                            }
+                            else {
+                                cout << "HIzo mal algo en su turno\nya sea que la ficha no esta en su mano o la posicin de la palabra esta fuera del tablero\n pierde su turno\n";
+                                system("pause");
+                            }
+                        }
+                        else {
+                            bool valido = false;
+                            puntaje_temporal = puntaje_jugador1;
+                            int valido2 = 0;
+                            for (int i = 0; i < palabra.length(); i++)
+                            {
+                                NodoCola* buscarMano = fj1->buscar(palabra[i]);
+                                bool sy = tablero->existeColumna(y+i);
+                                bool sx = tablero->existeFila(x);
+                                if (sy && sx && (y + i) >= 0)
+                                {
+                                    NodoMatriz* nodo = tablero->tieneNodo(x, y+i);
+                                    if (nodo != NULL)
+                                    {
+                                        if (nodo->getNodo() != NULL)
+                                        {
+                                            if (nodo->getNodo()->getCaracter() == palabra[i])
+                                            {
+                                                valido2++;
+                                                if (nodo->getEstado() == "X2")
+                                                {
+                                                    puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 2);
+                                                    valido = true;
+                                                }
+                                                else if (nodo->getEstado() == "X3")
+                                                {
+                                                    puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 3);
+                                                    valido = true;
+                                                }
+                                                else {
+                                                    puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 1);
+                                                    valido = true;
+                                                }
+                                            }
+                                            else {
+                                                valido = false;
+                                                break;
+                                            }
+                                        }
+                                        else {
+                                            if (buscarMano != NULL)
+                                            {
+                                                if (nodo->getEstado() == "X2")
+                                                {
+                                                    puntaje_temporal = puntaje_temporal + (buscarMano->getPunteo() * 2);
+                                                }
+                                                else if (nodo->getEstado() == "X3")
+                                                {
+                                                    puntaje_temporal = puntaje_temporal + (buscarMano->getPunteo() * 3);
+                                                }
+                                                valido = true;
+                                            }
+                                            else {
+                                                valido = false;
+                                                break;
+                                            }
+
+                                        }
+                                    }
+                                    else {
+                                        if (buscarMano != NULL)
+                                        {
+
+                                            puntaje_temporal = puntaje_temporal + buscarMano->getPunteo();
+                                            valido = true;
+                                        }
+                                        else {
+                                            valido = false;
+                                            break;
+                                        }
+                                    }
+                                }
+                                else {
+                                    valido = false;
+                                    break;
+                                }
+                            }
+                            if (valido && valido2>0)
+                            {
+
+                                turnoInicial = false;
+                                puntaje_jugador1 = puntaje_temporal;
+                                for (int i = 0; i < palabra.length(); i++)
+                                {
+                                    NodoCola* buscarMano = fj1->buscar(palabra[i]);
+                                    bool sy = tablero->existeColumna(y+i);
+                                    bool sx = tablero->existeFila(x);
+                                    if (sy && sx && (y+ i) >= 0)
+                                    {
+                                        NodoMatriz* nodo = tablero->tieneNodo(x, y+i);
+                                        if (nodo != NULL)
+                                        {
+                                            if (nodo->getNodo() != NULL)
+                                            {
+                                                if (nodo->getNodo()->getCaracter() == palabra[i])
+                                                {
+                                                }
+                                            }
+                                            else {
+                                                tablero->agregarFicha(x, y+i, buscarMano);
+                                                fj1->borrar(buscarMano);
+                                            }
+                                        }
+                                        else {
+                                            tablero->agregarFicha(x, y+i, buscarMano);
+                                            fj1->borrar(buscarMano);
+                                        }
+                                    }
+                                }
+                            }
+                            else {
+                                cout << "HIzo mal algo en su turno\nya sea que la ficha no esta en su mano o la posicin de la palabra esta fuera del tablero\n pierde su turno\n";
+                                system("pause");
+                            }
+                        }
+                        }
+                    }
+                    else {
+                        cout << "\nLa Palabra No es Valida en el Diccionario\nPierde su turno\n";
+                    }
+                    turno = 2;
                 }break;
                 case 3: {
-
+                    fj1->graficar();
+                    cout << "\nVer Reporte de las fichas\n";
+                    system("pause");
                 }break;
                 case 4: {
-
+                    fj1->insertar(nuevaCola->desencolar());
+                    fj1->graficar();
+                    cout << "\nVer Reporte de las fichas\n";
+                    system("pause");
                 }break;
                 case 5: {
-
+                    tablero->graficar();
                 }break;
                 }
-                turno = 2;
             }
             else {
-                cout << "Turno Jugador2 - " + jugador2->getUsuario() +"\n";
+                cout << "\nTurno Jugador2 - " + jugador2->getUsuario() +" - " + to_string(puntaje_jugador2) + "\n";
                 MenuJuego();
                 cin >> opcion;
                 switch (opcion)
@@ -432,28 +939,580 @@ void iniciarJuego() {
                         }
                         else {
                             cout << "\nEsa Ficha No Existe\n";
+                            
                         }
+                        fj2->graficar();
                         cout << "¿Quiere seguir Cambiando Ficha? Presione 1. No o 2. Si: ";
                         cin >> j;
                     } while (j != 1);
+                    turno = 1;
                 }break;
                 case 2: {
+                    int x = 0;
+                    int y = 0;
+                    int recorrido = 0;
+                    string palabra = "";
+                    cout << "\nIngrese la Palabra: ";
+                    cin >> palabra;
+                    NodoDiccionario* buscarPalabra = nuevoDiccionario->buscar(palabra);
+                    if (buscarPalabra != NULL)
+                    {
+                        cout << "\nIngrese la Posicion Inicial en Fila: ";
+                        cin >> x;
+                        cout << "\nIngrese la Posicion Inicial en Columna: ";
+                        cin >> y;
+                        cout << "\nHacia donde quiere que vaya la palabra(1. Vertical 2. Horizontal): ";
+                        cin >> recorrido;
+                        if (recorrido == 1)
+                        {
+                            if (turnoInicial)
+                            {
+                                bool valido = false;
+                                puntaje_temporal = puntaje_jugador2;
 
+                                for (int i = 0; i < palabra.length(); i++)
+                                {
+                                    NodoCola* buscarMano = fj2->buscar(palabra[i]);
+                                    bool sy = tablero->existeColumna(y);
+                                    bool sx = tablero->existeFila(x - i);
+                                    system("pause");
+                                    if (sy && sx && (x - i) >= 0)
+                                    {
+                                        NodoMatriz* nodo = tablero->tieneNodo(x-i, y);
+                                        system("pause");
+                                        if (nodo != NULL)
+                                        {
+                                            if (nodo->getNodo() != NULL)
+                                            {
+                                                if (nodo->getNodo()->getCaracter() == palabra[i])
+                                                {
+                                                    if (nodo->getEstado() == "X2")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 2);
+                                                        valido = true;
+                                                    }
+                                                    else if (nodo->getEstado() == "X3")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 3);
+                                                        valido = true;
+                                                    }
+                                                    else {
+                                                        puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 1);
+                                                        valido = true;
+                                                    }
+                                                }
+                                                else {
+                                                    valido = false;
+                                                    break;
+                                                }
+                                            }
+                                            else {
+                                                if (buscarMano != NULL)
+                                                {
+                                                    if (nodo->getEstado() == "X2")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (buscarMano->getPunteo() * 2);
+                                                    }
+                                                    else if (nodo->getEstado() == "X3")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (buscarMano->getPunteo() * 3);
+                                                    }
+                                                    valido = true;
+                                                }
+                                                else {
+                                                    valido = false;
+                                                    break;
+                                                }
+
+                                            }
+                                        }
+                                        else {
+                                            if (buscarMano != NULL)
+                                            {
+
+                                                puntaje_temporal = puntaje_temporal + buscarMano->getPunteo();
+                                                valido = true;
+                                            }
+                                            else {
+                                                valido = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        valido = false;
+                                        break;
+                                    }
+                                }
+                                if (valido)
+                                {
+
+                                    turnoInicial = false;
+                                    puntaje_jugador2 = puntaje_temporal;
+                                    for (int i = 0; i < palabra.length(); i++)
+                                    {
+                                        NodoCola* buscarMano = fj2->buscar(palabra[i]);
+                                        bool sy = tablero->existeColumna(y);
+                                        bool sx = tablero->existeFila(x - i);
+                                        if (sy && sx && (x - i) >= 0)
+                                        {
+                                            NodoMatriz* nodo = tablero->tieneNodo(x - i, y);
+                                            if (nodo != NULL)
+                                            {
+                                                if (nodo->getNodo() != NULL)
+                                                {
+                                                    if (nodo->getNodo()->getCaracter() == palabra[i])
+                                                    {
+                                                    }
+                                                }
+                                                else {
+                                                    tablero->agregarFicha(x - i, y, buscarMano);
+                                                    fj2->borrar(buscarMano);
+                                                }
+                                            }
+                                            else {
+                                                tablero->agregarFicha(x - i, y, buscarMano);
+                                                fj2->borrar(buscarMano);
+                                            }
+                                        }
+                                    }
+                                }
+                                else {
+                                    cout << "HIzo mal algo en su turno\nya sea que la ficha no esta en su mano o la posicin de la palabra esta fuera del tablero\n pierde su turno\n";
+                                    system("pause");
+                                }
+                            }
+                            else {
+                                bool valido = false;
+                                puntaje_temporal = puntaje_jugador2;
+                                int valido2 = 0;
+                                for (int i = 0; i < palabra.length(); i++)
+                                {
+                                    NodoCola* buscarMano = fj2->buscar(palabra[i]);
+                                    bool sy = tablero->existeColumna(y);
+                                    bool sx = tablero->existeFila(x - i);
+                                    if (sy && sx && (x - i) >= 0)
+                                    {
+                                        NodoMatriz* nodo = tablero->tieneNodo(x-i, y);
+                                        if (nodo != NULL)
+                                        {
+                                            if (nodo->getNodo() != NULL)
+                                            {
+                                                if (nodo->getNodo()->getCaracter() == palabra[i])
+                                                {
+                                                    valido2++;
+                                                    if (nodo->getEstado() == "X2")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 2);
+                                                        valido = true;
+                                                    }
+                                                    else if (nodo->getEstado() == "X3")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 3);
+                                                        valido = true;
+                                                    }
+                                                    else {
+
+                                                        puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 1);
+                                                        valido = true;
+                                                    }
+                                                }
+                                                else {
+                                                    valido = false;
+                                                    break;
+                                                }
+                                            }
+                                            else {
+                                                if (buscarMano != NULL)
+                                                {
+                                                    if (nodo->getEstado() == "X2")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (buscarMano->getPunteo() * 2);
+                                                    }
+                                                    else if (nodo->getEstado() == "X3")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (buscarMano->getPunteo() * 3);
+                                                    }
+                                                    valido = true;
+                                                }
+                                                else {
+                                                    valido = false;
+                                                    break;
+                                                }
+
+                                            }
+                                        }
+                                        else {
+                                            if (buscarMano != NULL)
+                                            {
+
+                                                puntaje_temporal = puntaje_temporal + buscarMano->getPunteo();
+                                                valido = true;
+                                            }
+                                            else {
+                                                valido = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        valido = false;
+                                        break;
+                                    }
+                                }
+                                if (valido && valido2 > 0)
+                                {
+
+                                    turnoInicial = false;
+                                    puntaje_jugador2 = puntaje_temporal;
+                                    for (int i = 0; i < palabra.length(); i++)
+                                    {
+                                        NodoCola* buscarMano = fj2->buscar(palabra[i]);
+                                        bool sy = tablero->existeColumna(y);
+                                        bool sx = tablero->existeFila(x - i);
+                                        if (sy && sx && (x - i) >= 0)
+                                        {
+                                            NodoMatriz* nodo = tablero->tieneNodo(x - i, y);
+                                            if (nodo != NULL)
+                                            {
+                                                if (nodo->getNodo() != NULL)
+                                                {
+                                                    if (nodo->getNodo()->getCaracter() == palabra[i])
+                                                    {
+                                                    }
+                                                }
+                                                else {
+                                                    tablero->agregarFicha(x - i, y, buscarMano);
+                                                    fj2->borrar(buscarMano);
+                                                }
+                                            }
+                                            else {
+                                                tablero->agregarFicha(x - i, y, buscarMano);
+                                                fj2->borrar(buscarMano);
+                                            }
+                                        }
+                                    }
+                                }
+                                else {
+                                    cout << "HIzo mal algo en su turno\nya sea que la ficha no esta en su mano o la posicin de la palabra esta fuera del tablero\n pierde su turno\n";
+                                    system("pause");
+                                }
+                            }
+                        }
+                        else if (recorrido == 2) {
+                            if (turnoInicial)
+                            {
+                                bool valido = false;
+                                puntaje_temporal = puntaje_jugador1;
+
+                                for (int i = 0; i < palabra.length(); i++)
+                                {
+                                    NodoCola* buscarMano = fj2->buscar(palabra[i]);
+                                    bool sy = tablero->existeColumna(y + i);
+                                    bool sx = tablero->existeFila(x);
+                                    if (sy && sx && (y + i) >= 0)
+                                    {
+                                        NodoMatriz* nodo = tablero->tieneNodo(x, y + i);
+                                        if (nodo != NULL)
+                                        {
+                                            if (nodo->getNodo() != NULL)
+                                            {
+                                                if (nodo->getNodo()->getCaracter() == palabra[i])
+                                                {
+                                                    if (nodo->getEstado() == "X2")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 2);
+                                                        valido = true;
+                                                    }
+                                                    else if (nodo->getEstado() == "X3")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 3);
+                                                        valido = true;
+                                                    }
+                                                    else {
+                                                        puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 1);
+                                                        valido = true;
+                                                    }
+                                                }
+                                                else {
+                                                    valido = false;
+                                                    break;
+                                                }
+                                            }
+                                            else {
+                                                if (buscarMano != NULL)
+                                                {
+                                                    if (nodo->getEstado() == "X2")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (buscarMano->getPunteo() * 2);
+                                                    }
+                                                    else if (nodo->getEstado() == "X3")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (buscarMano->getPunteo() * 3);
+                                                    }
+                                                    valido = true;
+                                                }
+                                                else {
+                                                    valido = false;
+                                                    break;
+                                                }
+
+                                            }
+                                        }
+                                        else {
+                                            if (buscarMano != NULL)
+                                            {
+
+                                                puntaje_temporal = puntaje_temporal + buscarMano->getPunteo();
+                                                valido = true;
+                                            }
+                                            else {
+                                                valido = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        valido = false;
+                                        break;
+                                    }
+                                }
+                                if (valido)
+                                {
+
+                                    turnoInicial = false;
+                                    puntaje_jugador2 = puntaje_temporal;
+                                    for (int i = 0; i < palabra.length(); i++)
+                                    {
+                                        NodoCola* buscarMano = fj2->buscar(palabra[i]);
+                                        bool sy = tablero->existeColumna(y + i);
+                                        bool sx = tablero->existeFila(x);
+                                        if (sy && sx && (y + i) >= 0)
+                                        {
+                                            NodoMatriz* nodo = tablero->tieneNodo(x, y + i);
+                                            if (nodo != NULL)
+                                            {
+                                                if (nodo->getNodo() != NULL)
+                                                {
+                                                    if (nodo->getNodo()->getCaracter() == palabra[i])
+                                                    {
+                                                    }
+                                                }
+                                                else {
+                                                    tablero->agregarFicha(x, y + i, buscarMano);
+                                                    fj2->borrar(buscarMano);
+                                                }
+                                            }
+                                            else {
+                                                tablero->agregarFicha(x, y + i, buscarMano);
+                                                fj2->borrar(buscarMano);
+                                            }
+                                        }
+                                    }
+                                }
+                                else {
+                                    cout << "HIzo mal algo en su turno\nya sea que la ficha no esta en su mano o la posicin de la palabra esta fuera del tablero\n pierde su turno\n";
+                                    system("pause");
+                                }
+                            }
+                            else {
+                                bool valido = false;
+                                puntaje_temporal = puntaje_jugador2;
+                                int valido2 = 0;
+                                for (int i = 0; i < palabra.length(); i++)
+                                {
+                                    NodoCola* buscarMano = fj2->buscar(palabra[i]);
+                                    bool sy = tablero->existeColumna(y + i);
+                                    bool sx = tablero->existeFila(x);
+                                    if (sy && sx && (y + i) >= 0)
+                                    {
+                                        NodoMatriz* nodo = tablero->tieneNodo(x, y + i);
+                                        if (nodo != NULL)
+                                        {
+                                            if (nodo->getNodo() != NULL)
+                                            {
+                                                if (nodo->getNodo()->getCaracter() == palabra[i])
+                                                {
+                                                    valido2++;
+                                                    if (nodo->getEstado() == "X2")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 2);
+                                                        valido = true;
+                                                    }
+                                                    else if (nodo->getEstado() == "X3")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 3);
+                                                        valido = true;
+                                                    }
+                                                    else {
+                                                        puntaje_temporal = puntaje_temporal + (nodo->getNodo()->getPunteo() * 1);
+                                                        valido = true;
+                                                    }
+                                                }
+                                                else {
+                                                    valido = false;
+                                                    break;
+                                                }
+                                            }
+                                            else {
+                                                if (buscarMano != NULL)
+                                                {
+                                                    if (nodo->getEstado() == "X2")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (buscarMano->getPunteo() * 2);
+                                                    }
+                                                    else if (nodo->getEstado() == "X3")
+                                                    {
+                                                        puntaje_temporal = puntaje_temporal + (buscarMano->getPunteo() * 3);
+                                                    }
+                                                    valido = true;
+                                                }
+                                                else {
+                                                    valido = false;
+                                                    break;
+                                                }
+
+                                            }
+                                        }
+                                        else {
+                                            if (buscarMano != NULL)
+                                            {
+
+                                                puntaje_temporal = puntaje_temporal + buscarMano->getPunteo();
+                                                valido = true;
+                                            }
+                                            else {
+                                                valido = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else {
+                                        valido = false;
+                                        break;
+                                    }
+                                }
+                                if (valido && valido2 > 0)
+                                {
+
+                                    turnoInicial = false;
+                                    puntaje_jugador2 = puntaje_temporal;
+                                    for (int i = 0; i < palabra.length(); i++)
+                                    {
+                                        NodoCola* buscarMano = fj2->buscar(palabra[i]);
+                                        bool sy = tablero->existeColumna(y + i);
+                                        bool sx = tablero->existeFila(x);
+                                        if (sy && sx && (y + i) >= 0)
+                                        {
+                                            NodoMatriz* nodo = tablero->tieneNodo(x, y + i);
+                                            if (nodo != NULL)
+                                            {
+                                                if (nodo->getNodo() != NULL)
+                                                {
+                                                    if (nodo->getNodo()->getCaracter() == palabra[i])
+                                                    {
+                                                    }
+                                                }
+                                                else {
+                                                    tablero->agregarFicha(x, y + i, buscarMano);
+                                                    fj2->borrar(buscarMano);
+                                                }
+                                            }
+                                            else {
+                                                tablero->agregarFicha(x, y + i, buscarMano);
+                                                fj2->borrar(buscarMano);
+                                            }
+                                        }
+                                    }
+                                }
+                                else {
+                                    cout << "HIzo mal algo en su turno\nya sea que la ficha no esta en su mano o la posicin de la palabra esta fuera del tablero\n pierde su turno\n";
+                                    system("pause");
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        cout << "\nLa Palabra No es Valida en el Diccionario\nPierde su turno\n";
+                    }
+                    turno = 1;
                 }break;
                 case 3: {
-
+                    fj2->graficar();
+                    cout << "\nVer Reporte de las fichas\n";
+                    system("pause");
                 }break;
                 case 4: {
-
+                    fj2->insertar(nuevaCola->desencolar());
+                    fj2->graficar();
+                    cout << "\nVer Reporte de las fichas\n";
+                    system("pause");
                 }break;
                 case 5: {
-
+                    tablero->graficar();
                 }break;
                 }
-                turno = 1;
             }
         } while (opcion != 6);
+        ListaPuntajeJugador* pj1 = new ListaPuntajeJugador();
+        if (jugador1 != NULL)
+        {
+            pj1->iniciarLista(jugador1->getNodoPuntaje());
+            pj1->insertar(jugador1->getUsuario(), puntaje_jugador1);
+            jugador1->setNodoPuntaje(pj1->retornrPrimero());
+        }
+        ListaPuntajeJugador* pj2 = new ListaPuntajeJugador();
+        if (jugador2 != NULL)
+        {
+            pj2->iniciarLista(jugador2->getNodoPuntaje());
+            pj2->insertar(jugador2->getUsuario(), puntaje_jugador2);
+            jugador2->setNodoPuntaje(pj2->retornrPrimero());
+        }
     }    
+}
+void leerArchivo(string rutaArchivo) {
+    std::ifstream i(rutaArchivo);
+    json archivo;
+    i >> archivo;
+    int dimensiones_tablero = 0;
+    dimensiones_tablero = archivo.at("dimension");
+    nuevoDiccionario->vaciarLista();
+    tablero->iniciartablero();
+    tablero->generarTablero(dimensiones_tablero);
+    for (int j= 0; j < archivo.at("casillas").at("dobles").size(); j++)
+    {
+        tablero->generarDobles(archivo.at("casillas").at("dobles")[j].at("x"), archivo.at("casillas").at("dobles")[j].at("y"));
+    }
+    for (int j = 0; j < archivo.at("casillas").at("triples").size(); j++)
+    {
+        tablero->generarTriples(archivo.at("casillas").at("triples")[j].at("x"), archivo.at("casillas").at("triples")[j].at("y"));
+    }
+    for (int j = 0; j < archivo.at("diccionario").size(); j++)
+    {
+        nuevoDiccionario->insertar(archivo.at("diccionario")[j].at("palabra"));
+    }
+}
+void MenuArchivo() {
+    std::cout << "Menu Tablero\n";
+    std::cout << "1. Leer Archivo\n";
+    std::cout << "2. Regresar\n";
+}
+void opcionesArchivo() {
+    int opcion = 0;
+    do
+    {
+        MenuArchivo();
+        cin >> opcion;
+        switch (opcion)
+        {
+        case 1: {
+            string ruta = "";
+            cout << "\nRuta Del Archivo: ";
+            cin >> ruta;
+            leerArchivo(ruta);
+        }break;
+        }
+    } while (opcion !=2);
 }
 int main()
 {
@@ -497,8 +1556,11 @@ int main()
             case 8: {
                 opcionesManos();
             }break;
+            case 9: {
+                opcionesArchivo();
+            }break;
             }
-        } while (opcion != 9);
+        } while (opcion != 10);
     }
     catch (const std::exception&)
     {

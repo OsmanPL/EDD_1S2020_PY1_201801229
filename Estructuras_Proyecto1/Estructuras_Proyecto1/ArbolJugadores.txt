@@ -3,7 +3,7 @@ node0 [label="osman"];
 node0 -> node1;
 node1 [label="jessi"];
 node1 -> node2;
-node2 [label="avalos"];
+node2 [label="bot"];
 node1 -> node3;
 node3 [label="kevin"];
 node0 -> node4;

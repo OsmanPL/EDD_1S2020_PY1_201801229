@@ -153,6 +153,7 @@
     <ClInclude Include="ColaLetras.h" />
     <ClInclude Include="Diccionario.h" />
     <ClInclude Include="FichasJugador.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="Jugador.h" />
     <ClInclude Include="ArbolJugador.h" />
     <ClInclude Include="ListaPuntajesJugador.h" />

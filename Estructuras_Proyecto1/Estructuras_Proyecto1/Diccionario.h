@@ -58,6 +58,7 @@ public:
 				aux = aux->getSiguiente();
 			} while (aux != primero);
 		}
+		return NULL;
 		
 	}
 	void grficar() {
@@ -105,6 +106,6 @@ public:
 
 		archivo.close();
 
-		system("dot -Tjpg Diccionario.txt -o Diccionario.jpg");
+		system("dot -Tjpg Diccionario.txt -o Diccionario.jpg -Gcharset=latin1");
 	}
 };

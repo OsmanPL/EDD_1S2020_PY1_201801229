@@ -55,6 +55,7 @@ public:
 			}
 			aux = aux->getSiguiente();
 		}
+		return NULL;
 	}
 	void borrar(NodoCola* eliminar) {
 		NodoCola* aux = primero;
@@ -62,8 +63,19 @@ public:
 		{
 			if (aux == eliminar)
 			{
-				aux->getAnterior()->setSiguiente(aux->getSiguiente());
-				aux->getSiguiente()->setAnterior(aux->getAnterior());
+				if (aux->getAnterior()!=NULL && aux->getSiguiente()==NULL)
+				{
+					aux->getAnterior()->setSiguiente(NULL);
+				}
+				else if (aux->getSiguiente()!=NULL && aux->getAnterior()==NULL)
+				{
+
+					aux->getSiguiente()->setAnterior(NULL);
+				}
+				else if(aux->getSiguiente()!=NULL && aux->getAnterior()!=NULL) {
+					aux->getAnterior()->setSiguiente(aux->getSiguiente());
+					aux->getSiguiente()->setAnterior(aux->getAnterior());
+				}
 				break;
 			}
 			aux = aux->getSiguiente();
@@ -106,7 +118,7 @@ public:
 
 		archivo.close();
 
-		system("dot -Tjpg FichasJugador.txt -o FichasJugador.jpg");
+		system("dot -Tjpg FichasJugador.txt -o FichasJugador.jpg -Gcharset=latin1");
 	}
 	
 };

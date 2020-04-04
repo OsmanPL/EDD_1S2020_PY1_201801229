@@ -59,6 +59,7 @@ public:
 			}
 			aux = aux->getAbajo();
 		}
+		return NULL;
 	}
 
 	NodoMatriz* devolverColumna(int y) {
@@ -71,6 +72,7 @@ public:
 			}
 			aux = aux->getDerecha();
 		}
+		return NULL;
 	}
 
 	void crearColumna(int y) {
@@ -186,6 +188,7 @@ public:
 	}
 	void generarDobles(int x, int y) {
 		NodoMatriz* doble = new NodoMatriz();
+		NodoCola* vacio = new NodoCola();
 		doble->setX(x);
 		doble->setY(y);
 		doble->setEstado("X2");
@@ -201,6 +204,7 @@ public:
 	}
 	void generarTriples(int x, int y) {
 		NodoMatriz* doble = new NodoMatriz();
+		NodoCola* vacio = new NodoCola();
 		doble->setX(x);
 		doble->setY(y);
 		doble->setEstado("X3");
@@ -212,6 +216,31 @@ public:
 			NodoMatriz* columna = devolverColumna(y);
 			agregarNodoColumna(columna, doble, x);
 			agregarNodoFila(fila, doble, y);
+		}
+	}
+	NodoMatriz* tieneNodo(int x, int y) {
+
+		NodoMatriz* fila = devolverColumna(x);
+		NodoMatriz* columna = devolverColumna(y);
+		if (columna!=NULL&&fila!=NULL)
+		{
+			if (columna->getAbajo()!=NULL)
+			{
+				NodoMatriz* aux = columna->getAbajo();
+				while (aux!=NULL)
+				{
+					if (aux->getX() == fila->getX())
+					{
+						return aux;
+					}
+					aux = aux->getAbajo();
+				}
+				return NULL;
+			}
+			return NULL;
+		}
+		else {
+			return NULL;
 		}
 	}
 	void agregarFicha(int x, int y, NodoCola* ficha) {

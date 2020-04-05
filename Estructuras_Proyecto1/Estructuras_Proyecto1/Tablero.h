@@ -201,6 +201,30 @@ public:
 			agregarNodoColumna(columna, doble, x);
 			agregarNodoFila(fila, doble, y);
 		}
+		else if (exFila && exColumna==false)
+		{
+			crearColumna(y);
+			NodoMatriz* fila = devolverFila(x);
+			NodoMatriz* columna = devolverColumna(y);
+			agregarNodoColumna(columna, doble, x);
+			agregarNodoFila(fila, doble, y);
+		}
+		else if (exColumna && exFila==false)
+		{
+			crearFila(x);
+			NodoMatriz* fila = devolverFila(x);
+			NodoMatriz* columna = devolverColumna(y);
+			agregarNodoColumna(columna, doble, x);
+			agregarNodoFila(fila, doble, y);
+		}
+		else {
+			crearFila(x);
+			crearColumna(y);
+			NodoMatriz* fila = devolverFila(x);
+			NodoMatriz* columna = devolverColumna(y);
+			agregarNodoColumna(columna, doble, x);
+			agregarNodoFila(fila, doble, y);
+		}
 	}
 	void generarTriples(int x, int y) {
 		NodoMatriz* doble = new NodoMatriz();
@@ -214,6 +238,33 @@ public:
 		{
 			NodoMatriz* fila = devolverFila(x);
 			NodoMatriz* columna = devolverColumna(y);
+			agregarNodoColumna(columna, doble, x);
+			agregarNodoFila(fila, doble, y);
+		}
+		else if (exFila && exColumna == false)
+		{
+			crearColumna(y);
+			NodoMatriz* fila = devolverFila(x);
+			NodoMatriz* columna = devolverColumna(y);
+			agregarNodoColumna(columna, doble, x);
+			agregarNodoFila(fila, doble, y);
+		}
+		else if (exColumna && exFila == false)
+		{
+			crearFila(x);
+			NodoMatriz* fila = devolverFila(x);
+			NodoMatriz* columna = devolverColumna(y);
+			agregarNodoColumna(columna, doble, x);
+			agregarNodoFila(fila, doble, y);
+		}
+		else {
+			crearFila(x);
+
+			crearColumna(y);
+
+			NodoMatriz* fila = devolverFila(x);
+			NodoMatriz* columna = devolverColumna(y);
+			
 			agregarNodoColumna(columna, doble, x);
 			agregarNodoFila(fila, doble, y);
 		}
@@ -257,219 +308,196 @@ public:
 			agregarNodoColumna(columna, doble, x);
 			agregarNodoFila(fila, doble, y);
 		}
-	}
-	void agregarNodoColumna(NodoMatriz* columna, NodoMatriz* nodo, int fila) {
-		NodoMatriz* aux = columna->getAbajo();
-		bool agregar = true;
-		if (aux==NULL)
+		else if (exFila && exColumna == false)
 		{
-			columna->setAbajo(nodo);
-			nodo->setArriba(columna);
+			crearColumna(y);
+			NodoMatriz* fila = devolverFila(x);
+			NodoMatriz* columna = devolverColumna(y);
+			agregarNodoColumna(columna, doble, x);
+			agregarNodoFila(fila, doble, y);
+		}
+		else if (exColumna && exFila == false)
+		{
+			crearFila(x);
+			NodoMatriz* fila = devolverFila(x);
+			NodoMatriz* columna = devolverColumna(y);
+			agregarNodoColumna(columna, doble, x);
+			agregarNodoFila(fila, doble, y);
 		}
 		else {
-			NodoMatriz* temporal = aux;
-			while (agregar)
+			crearFila(x);
+			crearColumna(y);
+			NodoMatriz* fila = devolverFila(x);
+			NodoMatriz* columna = devolverColumna(y);
+			agregarNodoColumna(columna, doble, x);
+			agregarNodoFila(fila, doble, y);
+		}
+	}
+	void agregarNodoColumna(NodoMatriz* columna, NodoMatriz* nodo, int fila) {
+		if (columna->getAbajo()!=NULL)
+		{
+			NodoMatriz* aux = columna->getAbajo();
+			bool agregar = true;
+			while(agregar)
 			{
-				if (aux->getAbajo()!=NULL)
+				if (aux->getAbajo() != NULL)
 				{
-					if (fila == temporal->getX())
+					NodoMatriz* temporal = aux->getAbajo();
+					if (fila > aux->getX() && fila < temporal->getX())
 					{
-						if (temporal->getAbajo()!=NULL && temporal->getArriba()!=NULL)
-						{
-							nodo->setAbajo(temporal->getAbajo());
-							nodo->setArriba(temporal->getArriba());
-							temporal->getArriba()->setAbajo(nodo);
-							temporal->getAbajo()->setArriba(nodo);
-							nodo->setEstado(temporal->getEstado());
-						}
-						else if (temporal->getAbajo()!=NULL && temporal->getArriba()==NULL)
-						{
-							nodo->setAbajo(temporal->getAbajo());
-							temporal->getAbajo()->setArriba(nodo);
-
-							nodo->setEstado(temporal->getEstado());
-						}
-						else if (temporal->getAbajo()==NULL && temporal->getArriba()!=NULL)
-						{
-							nodo->setArriba(temporal->getArriba());
-							temporal->getArriba()->setAbajo(nodo);
-
-							nodo->setEstado(temporal->getEstado());
-						}
-						temporal = NULL;
+						aux->setAbajo(nodo);
+						nodo->setArriba(aux);
+						temporal->setArriba(nodo);
+						nodo->setAbajo(temporal);
 						agregar = false;
+						break;
 					}
-					else if (fila > temporal->getX() && fila<temporal->getAbajo()->getX())
+					else if (fila < aux->getX())
 					{
-						temporal->setAbajo(nodo);
-						nodo->setArriba(temporal);
+						aux->getArriba()->setAbajo(nodo);
+						nodo->setArriba(aux->getArriba());
 						aux->setArriba(nodo);
 						nodo->setAbajo(aux);
 						agregar = false;
+						break;
 					}
-					else if (fila < temporal->getX())
+					else if (fila == aux->getX())
 					{
-						temporal->getArriba()->setAbajo(nodo);
-						nodo->setArriba(temporal->getArriba());
-						temporal->setArriba(nodo);
-						nodo->setAbajo(temporal);
+						if (nodo->getNodo() != NULL)
+						{
+							aux->setNodo(nodo->getNodo());
+						}
+						else
+						{
+							aux->setEstado(nodo->getEstado());
+						}
 						agregar = false;
+						break;
 					}
-					else {
-						temporal = aux;
-						aux = aux->getAbajo();
-					}
+					aux = aux->getAbajo();
 				}
 				else {
-					if (fila == temporal->getX())
+					if (fila > aux->getX())
 					{
-						if (temporal->getAbajo() != NULL && temporal->getArriba() != NULL)
-						{
-							nodo->setAbajo(temporal->getAbajo());
-							nodo->setArriba(temporal->getArriba());
-							temporal->getArriba()->setAbajo(nodo);
-							temporal->getAbajo()->setArriba(nodo);
-
-							nodo->setEstado(temporal->getEstado());
-						}
-						else if (temporal->getAbajo() != NULL && temporal->getArriba() == NULL)
-						{
-							nodo->setAbajo(temporal->getAbajo());
-							temporal->getAbajo()->setArriba(nodo);
-
-							nodo->setEstado(temporal->getEstado());
-						}
-						else if (temporal->getAbajo() == NULL && temporal->getArriba() != NULL)
-						{
-							nodo->setArriba(temporal->getArriba());
-							temporal->getArriba()->setAbajo(nodo);
-
-							nodo->setEstado(temporal->getEstado());
-						}
-						temporal = NULL;
+						aux->setAbajo(nodo);
+						nodo->setArriba(aux);
 						agregar = false;
+						break;
 					}
-					else if (fila < temporal->getX())
+					else if (fila < aux->getX())
 					{
-						temporal->getArriba()->setAbajo(nodo);
-						nodo->setArriba(temporal->getArriba());
-						temporal->setArriba(nodo);
-						nodo->setAbajo(temporal);
+						aux->getArriba()->setAbajo(nodo);
+						nodo->setArriba(aux->getArriba());
+						aux->setArriba(nodo);
+						nodo->setAbajo(aux);
+						agregar = false;
+						break;
 					}
-					else {
-						temporal->setAbajo(nodo);
-						nodo->setArriba(temporal);
+					else if (fila == aux->getX())
+					{
+						if (nodo->getNodo() != NULL)
+						{
+							aux->setNodo(nodo->getNodo());
+						}
+						else
+						{
+							aux->setEstado(nodo->getEstado());
+						}
+						agregar = false;
+						break;
 					}
 					agregar = false;
+					break;
 				}
 			}
+		}
+		else {
+			columna->setAbajo(nodo);
+			nodo->setArriba(columna);
 		}
 	}
 
 	void agregarNodoFila(NodoMatriz* fila, NodoMatriz* nodo, int columna) {
-		NodoMatriz* aux = fila->getDerecha();
-		bool agregar = true;
-		if (aux == NULL)
+		if (fila->getDerecha() != NULL)
 		{
-			fila->setDerecha(nodo);
-			nodo->setIzquierda(fila);
-		}
-		else {
-			NodoMatriz* temporal = aux;
+			NodoMatriz* aux = fila->getDerecha();
+			bool agregar = true;
 			while (agregar)
 			{
 				if (aux->getDerecha() != NULL)
 				{
-					if (columna == temporal->getY())
+					NodoMatriz* temporal = aux->getDerecha();
+					if (columna > aux->getY() && columna < temporal->getY())
 					{
-						if (temporal->getDerecha() != NULL && temporal->getIzquierda() != NULL)
-						{
-							nodo->setDerecha(temporal->getDerecha());
-							nodo->setIzquierda(temporal->getIzquierda());
-							temporal->getIzquierda()->setDerecha(nodo);
-							temporal->getDerecha()->setIzquierda(nodo);
-
-							nodo->setEstado(temporal->getEstado());
-						}
-						else if (temporal->getDerecha() != NULL && temporal->getIzquierda() == NULL)
-						{
-							nodo->setDerecha(temporal->getDerecha());
-							temporal->getDerecha()->setIzquierda(nodo);
-
-							nodo->setEstado(temporal->getEstado());
-						}
-						else if (temporal->getDerecha() == NULL && temporal->getIzquierda() != NULL)
-						{
-							nodo->setIzquierda(temporal->getIzquierda());
-							temporal->getIzquierda()->setDerecha(nodo);
-
-							nodo->setEstado(temporal->getEstado());
-						}
+						aux->setDerecha(nodo);
+						nodo->setIzquierda(aux);
+						temporal->setIzquierda(nodo);
+						nodo->setDerecha(temporal);
 						agregar = false;
+						break;
 					}
-					else if (columna > temporal->getY() && columna < temporal->getDerecha()->getY())
+					else if (columna < aux->getY())
 					{
-						temporal->setDerecha(nodo);
-						nodo->setIzquierda(temporal);
+						aux->getIzquierda()->setDerecha(nodo);
+						nodo->setIzquierda(aux->getIzquierda());
 						aux->setIzquierda(nodo);
 						nodo->setDerecha(aux);
 						agregar = false;
+						break;
 					}
-					else if (columna < temporal->getY())
+					else if (columna == aux->getY())
 					{
-						temporal->getIzquierda()->setDerecha(nodo);
-						nodo->setIzquierda(temporal->getIzquierda());
-						temporal->setIzquierda(nodo);
-						nodo->setDerecha(temporal);
+						if (nodo->getNodo() != NULL)
+						{
+							aux->setNodo(nodo->getNodo());
+						}
+						else
+						{
+							aux->setEstado(nodo->getEstado());
+						}
 						agregar = false;
+						break;
 					}
-					else {
-						temporal = aux;
-						aux = aux->getDerecha();
-					}
+					aux = aux->getDerecha();
 				}
 				else {
-					if (columna == temporal->getY())
+					if (columna > aux->getY())
 					{
-						if (temporal->getDerecha() != NULL && temporal->getIzquierda() != NULL)
+						aux->setDerecha(nodo);
+						nodo->setIzquierda(aux);
+						agregar = false;
+						break;
+					}
+					else if (columna < aux->getY())
+					{
+						aux->getIzquierda()->setDerecha(nodo);
+						nodo->setIzquierda(aux->getIzquierda());
+						aux->setIzquierda(nodo);
+						nodo->setDerecha(aux);
+						agregar = false;
+						break;
+					}
+					else if (columna == aux->getY())
+					{
+						if (nodo->getNodo() != NULL)
 						{
-							nodo->setDerecha(temporal->getDerecha());
-							nodo->setIzquierda(temporal->getIzquierda());
-							temporal->getIzquierda()->setDerecha(nodo);
-							temporal->getDerecha()->setIzquierda(nodo);
-
-							nodo->setEstado(temporal->getEstado());
+							aux->setNodo(nodo->getNodo());
 						}
-						else if (temporal->getDerecha() != NULL && temporal->getIzquierda() == NULL)
+						else
 						{
-							nodo->setDerecha(temporal->getDerecha());
-							temporal->getDerecha()->setIzquierda(nodo);
-
-							nodo->setEstado(temporal->getEstado());
-						}
-						else if (temporal->getDerecha() == NULL && temporal->getIzquierda() != NULL)
-						{
-							nodo->setIzquierda(temporal->getIzquierda());
-							temporal->getIzquierda()->setDerecha(nodo);
-
-							nodo->setEstado(temporal->getEstado());
+							aux->setEstado(nodo->getEstado());
 						}
 						agregar = false;
-					}
-					else if (columna < temporal->getY())
-					{
-						temporal->getIzquierda()->setDerecha(nodo);
-						nodo->setIzquierda(temporal->getIzquierda());
-						temporal->setIzquierda(nodo);
-						nodo->setDerecha(temporal);
-					}
-					else {
-						temporal->setDerecha(nodo);
-						nodo->setIzquierda(temporal);
+						break;
 					}
 					agregar = false;
+					break;
 				}
 			}
+		}
+		else {
+			fila->setDerecha(nodo);
+			nodo->setIzquierda(fila);
 		}
 	}
 	void graficar() {

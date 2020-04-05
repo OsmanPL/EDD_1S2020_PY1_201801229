@@ -1,14 +1,10 @@
 digraph FichasJugador{
 rankdir="LR";
-node0 [label="a"];
-node1 [label="e"];
-node2 [label="s"];
-node3 [label="i"];
-node4 [label="e"];
-node5 [label="f"];
-node6 [label="n"];
-node7 [label="s"];
-node8 [label="z"];
-node9 [label="m"];
-node10 [label="s"];
-node0 -> node1;node1 -> node0;node1 -> node2;node2 -> node1;node2 -> node3;node3 -> node2;node3 -> node4;node4 -> node3;node4 -> node5;node5 -> node4;node5 -> node6;node6 -> node5;node6 -> node7;node7 -> node6;node7 -> node8;node8 -> node7;node8 -> node9;node9 -> node8;node9 -> node10;node10 -> node9;}
+node0 [label="d"];
+node1 [label="a"];
+node2 [label="c"];
+node3 [label="s"];
+node4 [label="t"];
+node5 [label="e"];
+node6 [label="r"];
+node0 -> node1;node1 -> node0;node1 -> node2;node2 -> node1;node2 -> node3;node3 -> node2;node3 -> node4;node4 -> node3;node4 -> node5;node5 -> node4;node5 -> node6;node6 -> node5;}

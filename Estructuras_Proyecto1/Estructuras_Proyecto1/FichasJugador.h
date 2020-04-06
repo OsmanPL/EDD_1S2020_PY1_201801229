@@ -35,6 +35,19 @@ public:
 			primero = nuevo;
 		}
 	}
+	NodoCola* cambiar() {
+		NodoCola* aux = primero;
+		while (aux!=NULL)
+		{
+			if (aux->getSiguiente()==NULL)
+			{
+				aux->getAnterior()->setSiguiente(NULL);
+				return aux;
+			}
+			aux = aux->getSiguiente();
+		}
+		return NULL;
+	}
 	bool existe(char c) {
 		NodoCola* aux = primero;
 		while (aux != NULL) {

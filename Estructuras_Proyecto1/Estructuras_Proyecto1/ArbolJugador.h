@@ -12,6 +12,11 @@ private:
 public:
 	Jugador* raiz;
 	int i = 0;
+	int j = 0;
+	int k = 0;
+	Jugador* ultimoInorden;
+	Jugador* ultimoPreorden;
+	Jugador* ultimoPostorden;
 	bool arbolVacio() {
 		if (raiz!=NULL)
 		{
@@ -129,6 +134,119 @@ public:
 			grafica += "node"+ to_string(l) +" -> node"+ to_string(i) +";\n";
 			grafica += graficar(actual->getDerecha());
 		}
+		return grafica;
+	}
+	void iniciarInorden() {
+		Jugador* aux = raiz;
+		string grafica = "digraph Inorden{\nrankdir=\u0022LR\u0022;\n";
+		grafica += inorden(aux);
+		grafica += "}";
+		ofstream archivo;
+		archivo.open("Inorden.txt", ios::out);
+
+		if (archivo.fail())
+		{
+			cout << "Error: no se pudo abrir el archivo";
+			exit(1);
+		}
+		archivo << grafica;
+
+		archivo.close();
+
+		system("dot -Tjpg Inorden.txt -o Inorden.jpg");
+	}
+	string inorden(Jugador* actual) {
+		string grafica = "";
+		
+		if (actual->getIzquierda()!=NULL)
+		{
+			grafica += inorden(actual->getIzquierda());
+			grafica += ultimoInorden->getUsuario() + " -> " + actual->getUsuario()+";\n";
+			ultimoInorden = actual;
+		}
+		grafica += actual->getUsuario() + ";\n";
+		ultimoInorden = actual;
+		if (actual->getDerecha()!=NULL)
+		{
+			grafica += ultimoInorden->getUsuario() + " -> " + actual->getDerecha()->getUsuario() + ";\n";
+			ultimoInorden = actual->getDerecha();
+			grafica += inorden(actual->getDerecha());
+			
+		}
+		return grafica;
+	}
+	void iniciarPreorden() {
+		Jugador* aux = raiz;
+		string grafica = "digraph Inorden{\nrankdir=\u0022LR\u0022;\n";
+		grafica += preorden(aux);
+		grafica += "}";
+		ofstream archivo;
+		archivo.open("Preorden.txt", ios::out);
+
+		if (archivo.fail())
+		{
+			cout << "Error: no se pudo abrir el archivo";
+			exit(1);
+		}
+		archivo << grafica;
+
+		archivo.close();
+
+		system("dot -Tjpg Preorden.txt -o Preorden.jpg");
+	}
+	string preorden(Jugador* actual) {
+		string grafica = "";
+		grafica += actual->getUsuario() + ";\n";
+		ultimoPreorden = actual;
+		if (actual->getIzquierda() != NULL)
+		{
+			grafica += ultimoPreorden->getUsuario() + " -> " + actual->getIzquierda()->getUsuario() + ";\n";
+			ultimoPreorden = actual->getIzquierda();
+			grafica += preorden(actual->getIzquierda());
+		}
+		if (actual->getDerecha() != NULL)
+		{
+			grafica += ultimoPreorden->getUsuario() + " -> " + actual->getDerecha()->getUsuario() + ";\n";
+			grafica += preorden(actual->getDerecha());
+			ultimoPreorden = actual->getDerecha();
+		}
+		return grafica;
+	}
+	void iniciarPostorden() {
+		Jugador* aux = raiz;
+		string grafica = "digraph Inorden{\nrankdir=\u0022LR\u0022;\n";
+		grafica += postorden(aux);
+		grafica += "}";
+		ofstream archivo;
+		archivo.open("Postorden.txt", ios::out);
+
+		if (archivo.fail())
+		{
+			cout << "Error: no se pudo abrir el archivo";
+			exit(1);
+		}
+		archivo << grafica;
+
+		archivo.close();
+
+		system("dot -Tjpg Postorden.txt -o Postorden.jpg");
+	}
+	string postorden(Jugador* actual) {
+		string grafica = "";
+		if (actual->getIzquierda() != NULL)
+		{
+			ultimoPostorden = actual->getIzquierda();
+			grafica += postorden(actual->getIzquierda());
+		}
+		if (actual->getDerecha() != NULL)
+		{
+			grafica += ultimoPostorden->getUsuario() + " -> " + actual->getDerecha()->getUsuario() + ";\n";
+			ultimoPostorden = actual->getDerecha();
+			grafica += postorden(actual->getDerecha());
+			grafica += ultimoPostorden->getUsuario() + " -> " + actual->getUsuario() + ";\n";
+		}
+		grafica += actual->getUsuario() + ";\n";
+		ultimoPostorden = actual;
 		return grafica;
 	}
 	Jugador* devolverRaiz() {

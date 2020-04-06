@@ -1,16 +1,18 @@
 ﻿  Estructuras_Proyecto1.cpp
+C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\ColaLetras.h(136,14): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
 C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Estructuras_Proyecto1.cpp(57,35): warning C4018: '<': no coinciden signed/unsigned
 C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Estructuras_Proyecto1.cpp(142,39): warning C4018: '<': no coinciden signed/unsigned
 C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Estructuras_Proyecto1.cpp(178,35): warning C4018: '<': no coinciden signed/unsigned
 C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Estructuras_Proyecto1.cpp(263,39): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Estructuras_Proyecto1.cpp(303,35): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Estructuras_Proyecto1.cpp(385,39): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Estructuras_Proyecto1.cpp(420,35): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Estructuras_Proyecto1.cpp(505,39): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Estructuras_Proyecto1.cpp(1019,22): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Estructuras_Proyecto1.cpp(1023,23): warning C4018: '<': no coinciden signed/unsigned
-C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Estructuras_Proyecto1.cpp(1027,23): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Estructuras_Proyecto1.cpp(314,35): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Estructuras_Proyecto1.cpp(396,39): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Estructuras_Proyecto1.cpp(431,35): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Estructuras_Proyecto1.cpp(516,39): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Estructuras_Proyecto1.cpp(911,15): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Estructuras_Proyecto1.cpp(1032,22): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Estructuras_Proyecto1.cpp(1036,23): warning C4018: '<': no coinciden signed/unsigned
+C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\Estructuras_Proyecto1.cpp(1040,23): warning C4018: '<': no coinciden signed/unsigned
 C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\FichasJugador.h(25): warning C4715: 'FichasJugador::listaVacia': no todas las rutas de acceso de control devuelven un valor
-C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\ArbolJugador.h(59): warning C4715: 'ArbolJugador::buscarJugador': no todas las rutas de acceso de control devuelven un valor
-C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\ColaLetras.h(23): warning C4715: 'ColaLetras::listaVacia': no todas las rutas de acceso de control devuelven un valor
+C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\ArbolJugador.h(64): warning C4715: 'ArbolJugador::buscarJugador': no todas las rutas de acceso de control devuelven un valor
+C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Estructuras_Proyecto1\ColaLetras.h(26): warning C4715: 'ColaLetras::listaVacia': no todas las rutas de acceso de control devuelven un valor
   Estructuras_Proyecto1.vcxproj -> C:\Users\l4kz4\Documents\GitHub\EDD_1S2020_PY1_201801229\Estructuras_Proyecto1\Debug\Estructuras_Proyecto1.exe

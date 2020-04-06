@@ -1,6 +1,6 @@
 digraph Diccionario{
  rankdir="LR";
-node0 [label=" sam "];node1 [label=" san "];node2 [label=" monte "];node3 [label=" mole "];node4 [label=" seno "];node5 [label=" res "];node6 [label=" te "];node7 [label=" tu "];node8 [label=" malo "];node9 [label=" loma "];node10 [label=" res "];node11 [label=" tera "];node12 [label=" reta "];node13 [label=" reto "];node14 [label=" diccionario "];node15 [label=" proyecto "];node16 [label=" mundo "];node17 [label=" hola "];node0 -> node1 ;
+node0 [label=" claro "];node1 [label=" tigo "];node2 [label=" te "];node3 [label=" tu "];node4 [label=" rota "];node5 [label=" tara "];node6 [label=" lata "];node7 [label=" tubo "];node8 [label=" bota "];node9 [label=" cebra "];node10 [label=" zeta "];node11 [label=" rato "];node12 [label=" leo "];node13 [label=" cosa "];node14 [label=" cola "];node15 [label=" saco "];node16 [label=" res "];node17 [label=" ese "];node18 [label=" ser "];node19 [label=" no "];node20 [label=" si "];node21 [label=" diccionario "];node22 [label=" proyecto "];node23 [label=" mundo "];node24 [label=" hola "];node0 -> node1 ;
 node1 -> node0 ;
 node1 -> node2 ;
 node2 -> node1 ;
@@ -34,6 +34,20 @@ node15 -> node16 ;
 node16 -> node15 ;
 node16 -> node17 ;
 node17 -> node16 ;
-node17 -> node0 ;
-node0 -> node17 ;
+node17 -> node18 ;
+node18 -> node17 ;
+node18 -> node19 ;
+node19 -> node18 ;
+node19 -> node20 ;
+node20 -> node19 ;
+node20 -> node21 ;
+node21 -> node20 ;
+node21 -> node22 ;
+node22 -> node21 ;
+node22 -> node23 ;
+node23 -> node22 ;
+node23 -> node24 ;
+node24 -> node23 ;
+node24 -> node0 ;
+node0 -> node24 ;
 }

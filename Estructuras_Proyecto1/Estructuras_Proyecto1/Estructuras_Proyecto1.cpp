@@ -255,7 +255,7 @@ int turnoJugador(int puntaje_jugador1, FichasJugador* fj1) {
                         break;
                     }
                 }
-                if (valido && valido2 > 0 && valido3>0)
+                if (valido && (valido2 > 0) && (valido3>0))
                 {
 
                     turnoInicial = false;
@@ -291,6 +291,17 @@ int turnoJugador(int puntaje_jugador1, FichasJugador* fj1) {
 
                     cout << "Jugada Valida\n";
                     tablero->graficar();
+                }
+                else {
+                    if (valido)
+                    {
+                        cout << "Jugada Invalida:True Valido2:"<<valido2<<" Valido3: "<<valido3<<"\n";
+                        tablero->graficar();
+                    }
+                    else {
+                        cout << "Jugada Invalida:False Valido2:" << valido2 << " Valido3: " << valido3 << "\n";
+                        tablero->graficar();
+                    }
                 }
             }
         }
@@ -532,6 +543,17 @@ int turnoJugador(int puntaje_jugador1, FichasJugador* fj1) {
                     cout << "Jugada Valida\n";
                     tablero->graficar();
                 }
+                else {
+                    if (valido)
+                    {
+                        cout << "Jugada Invalida:True Valido2:" << valido2 << " Valido3: " << valido3 << "\n";
+                        tablero->graficar();
+                    }
+                    else {
+                        cout << "Jugada Invalida:False Valido2:" << valido2 << " Valido3: " << valido3 << "\n";
+                        tablero->graficar();
+                    }
+                }
             }
         }
     }
@@ -542,7 +564,7 @@ int turnoJugador(int puntaje_jugador1, FichasJugador* fj1) {
 }
 
 void menu() {
-    std::cout << "Menu\n";
+    std::cout << "\nMenu\n";
     std::cout << "1. Probar Diccionario\n";
     std::cout << "2. Cola Letras\n";
     std::cout << "3. Matriz Dispersa\n";
@@ -555,32 +577,35 @@ void menu() {
     std::cout << "10. Salir\n";
 }
 void MenuDiccionario() {
-    std::cout << "Menu Diccionrio\n";
+    std::cout << "\nMenu Diccionrio\n";
     std::cout << "1. Agregar\n";
     std::cout << "2. Buscar\n";
     std::cout << "3. Graficar\n";
     std::cout << "4. Regresar\n";
 }
 void MenuCola() {
-    std::cout << "Menu Cola\n";
+    std::cout << "\nMenu Cola\n";
     std::cout << "1. Revolver\n";
     std::cout << "2. Graficar\n";
     std::cout << "3. Desencolar\n";
     std::cout << "4. Regresar\n";
 }
 void MenuArbol() {
-    std::cout << "Menu Arbol\n";
+    std::cout << "\nMenu Arbol\n";
     std::cout << "1. Agregar\n";
     std::cout << "2. Graficar\n";
-    std::cout << "3. Regresar\n";
+    std::cout << "3. Graficar Inorden\n";
+    std::cout << "4. Graficar Preorden\n";
+    std::cout << "5. Graficar Postorden\n";
+    std::cout << "6. Regresar\n";
 }
 void MenuJuego() {
-    std::cout << "Menu Juego\n";
-    std::cout << "1. Cambiar Ficha\n";
+    std::cout << "\nMenu Juego\n";
+    std::cout << "1. Cambiar Mano\n";
     std::cout << "2. Ingresar Palabra\n";
     std::cout << "3. Ver Mano\n";
-    std::cout << "4. Sacar Ficha Cola\n";
-    std::cout << "5. Graficar Tablero\n";
+    std::cout << "4. Graficar Tablero\n";
+    std::cout << "5. Cola\n";
     std::cout << "6. Salir del Juego\n";
 }
 void MenuTablero() {
@@ -678,8 +703,17 @@ void opcionesArbol() {
         case 2: {
             arbolJugadores->iniciarGrafica();
         }break;
+        case 3: {
+            arbolJugadores->iniciarInorden();
+        }break;
+        case 4: {
+            arbolJugadores->iniciarPreorden();
+        }break;
+        case 5: {
+            arbolJugadores->iniciarPostorden();
+        }break;
         }
-    } while (opcion != 3);
+    } while (opcion != 6);
 }
 
 void opcionesTablero() {
@@ -874,7 +908,8 @@ void iniciarJuego() {
     int puntaje_jugador1 = 0;
     int puntaje_jugador2 = 0;
     turnoInicial = true;
-    int turno = rand() % 2 +1;
+    srand(time(NULL));
+    int turno = rand()%2+1;
     int opcion = 0;
     fichas1 = new FichasJugador();
     fichas2 = new FichasJugador();
@@ -896,28 +931,21 @@ void iniciarJuego() {
                 switch (opcion)
                 {
                 case 1: {
-                    int j = 0;
-                    do {
-                        fichas1->graficar();
-                        char c = ' ';
-                        cout << "Mirar Reporte para ver sus fichas\n";
-                        cout << "Seleccine ficha a cambiar: ";
-                        cin >> c;
-                        NodoCola* buscar = fichas1->buscar(c);
-                        if (buscar != NULL)
+                   
+                    for (int i = 0; i < 7; i++)
+                    {
+                        NodoCola* cambiar = fichas1->cambiar();
+                        if (cambiar!=NULL)
                         {
-                            nuevaCola->encolar(buscar->getCaracter(), buscar->getPunteo());
-                            fichas1->borrar(buscar);
-                            fichas1->insertar(nuevaCola->desencolar());
+                            nuevaCola->encolar(cambiar->getCaracter(),cambiar->getPunteo());
                         }
-                        else {
-                            cout << "\nEsa Ficha No Existe\n";
-                        }
-                        fichas1->graficar();
-                        cout << "¿Quiere seguir Cambiando Ficha? Presione 1. No o 2. Si: ";
-                        cin >> j;
-                    } while (j != 1);
-                    turno = 2;
+                    }
+                    for (int i = 0; i < 7; i++)
+                    {
+                        fichas1->insertar(nuevaCola->desencolar());
+                    }
+                    cout << "\nMirar Reporte de su Mano\n";
+                    fichas1->graficar();
                 }break;
                 case 2: {
                     puntaje_jugador1 = turnoJugador(puntaje_jugador1,fichas1);
@@ -929,13 +957,10 @@ void iniciarJuego() {
                     system("pause");
                 }break;
                 case 4: {
-                    fichas1->insertar(nuevaCola->desencolar());
-                    fichas1->graficar();
-                    cout << "\nVer Reporte de las fichas\n";
-                    system("pause");
-                }break;
-                case 5: {
                     tablero->graficar();
+                }break; 
+                case 5: {
+                    nuevaCola->graficarCola();
                 }break;
                 }
             }
@@ -946,29 +971,20 @@ void iniciarJuego() {
                 switch (opcion)
                 {
                 case 1: {
-                    int j = 0;
-                    do {
-                        fichas2->graficar();
-                        char c = ' ';
-                        cout << "Mirar Reporte para ver sus fichas\n";
-                        cout << "Seleccine ficha a cambiar: ";
-                        cin >> c;
-                        NodoCola* buscar = fichas2->buscar(c);
-                        if (buscar != NULL)
+                    for (int i = 0; i < 7; i++)
+                    {
+                        NodoCola* cambiar = fichas2->cambiar();
+                        if (cambiar != NULL)
                         {
-                            nuevaCola->encolar(buscar->getCaracter(), buscar->getPunteo());
-                            fichas2->borrar(buscar);
-                            fichas2->insertar(nuevaCola->desencolar());
+                            nuevaCola->encolar(cambiar->getCaracter(), cambiar->getPunteo());
                         }
-                        else {
-                            cout << "\nEsa Ficha No Existe\n";
-                            
-                        }
-                        fichas2->graficar();
-                        cout << "¿Quiere seguir Cambiando Ficha? Presione 1. No o 2. Si: ";
-                        cin >> j;
-                    } while (j != 1);
-                    turno = 1;
+                    }
+                    for (int i = 0; i < 7; i++)
+                    {
+                        fichas2->insertar(nuevaCola->desencolar());
+                    }
+                    cout << "\nMirar Reporte de su Mano\n";
+                    fichas2->graficar();
                 }break;
                 case 2: {
                     puntaje_jugador2 = turnoJugador(puntaje_jugador2,fichas2);
@@ -980,13 +996,10 @@ void iniciarJuego() {
                     system("pause");
                 }break;
                 case 4: {
-                    fichas2->insertar(nuevaCola->desencolar());
-                    fichas2->graficar();
-                    cout << "\nVer Reporte de las fichas\n";
-                    system("pause");
+                    tablero->graficar();
                 }break;
                 case 5: {
-                    tablero->graficar();
+                    nuevaCola->graficarCola();
                 }break;
                 }
             }

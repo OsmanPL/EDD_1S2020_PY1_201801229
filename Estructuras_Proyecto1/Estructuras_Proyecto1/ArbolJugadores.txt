@@ -1,11 +1,11 @@
 digraph Jugadores{
-node5 [label="osman"];
-node5 -> node6;
-node6 [label="jessi"];
-node5 -> node7;
-node7 [label="samuel"];
-node7 -> node8;
-node8 [label="ricardo"];
-node7 -> node9;
-node9 [label="victor"];
+node0 [label="Heidy"];
+node0 -> node1;
+node1 [label="Carlos"];
+node1 -> node2;
+node2 [label="Antonio"];
+node1 -> node3;
+node3 [label="Eduardo"];
+node0 -> node4;
+node4 [label="Rodrigo"];
 }

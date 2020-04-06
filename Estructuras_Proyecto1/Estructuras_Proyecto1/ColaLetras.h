@@ -2,6 +2,9 @@
 #include <iostream>
 #include <cstdio>
 #include <fstream>
+#include <stdio.h>      
+#include <stdlib.h>     
+#include <time.h> 
 #include "NodoCola.h"
 
 using namespace std;
@@ -23,14 +26,14 @@ public:
 	}
 	void revolver() {
 		primero = NULL;
-		string letras = "a-1\n";
-		letras += "a-1\n";
-		letras += "a-1\n";
-		letras += "a-1\n";
-		letras += "a-1\n";
+		string letras = "a-1\n" ;
 		letras += "a-1\n" ;
 		letras += "a-1\n" ;
 		letras += "a-1\n" ;
+		letras += "a-1\n" ;
+		letras += "a-1\n" ;
+		letras += "a-1\n" ;
+		letras += "r-1\n" ;
 		letras += "a-1\n" ;
 		letras += "a-1\n" ;
 		letras += "a-1\n" ;
@@ -79,58 +82,59 @@ public:
 		letras += "r-1\n" ;
 		letras += "r-1\n" ;
 		letras += "r-1\n" ;
-		letras += "r-1\n" ;
-		letras += "r-1\n" ;
-		letras += "u-1\n" ;
-		letras += "u-1\n" ;
-		letras += "u-1\n" ;
-		letras += "u-1\n" ;
-		letras += "u-1\n" ;
-		letras += "t-1\n" ;
-		letras += "t-1\n" ;
-		letras += "t-1\n" ;
-		letras += "t-1\n" ;
-		letras += "d-2\n" ;
-		letras += "d-2\n" ;
-		letras += "d-2\n" ;
-		letras += "d-2\n" ;
-		letras += "d-2\n" ;
-		letras += "g-2\n" ;
-		letras += "g-2\n" ;
-		letras += "c-3\n" ;
-		letras += "c-3\n" ;
-		letras += "c-3\n" ;
-		letras += "c-3\n" ;
-		letras += "b-3\n" ;
-		letras += "b-3\n" ;
-		letras += "m-3\n" ;
-		letras += "m-3\n" ;
-		letras += "p-3\n" ;
-		letras += "p-3\n" ;
 		letras += "h-4\n" ;
+		letras += "r-1\n" ;
+		letras += "u-1\n" ;
+		letras += "u-1\n" ;
+		letras += "u-1\n" ;
+		letras += "u-1\n" ;
+		letras += "u-1\n" ;
+		letras += "t-1\n" ;
+		letras += "t-1\n" ;
+		letras += "t-1\n" ;
+		letras += "t-1\n" ;
+		letras += "d-2\n" ;
+		letras += "d-2\n" ;
+		letras += "d-2\n" ;
+		letras += "d-2\n" ;
+		letras += "d-2\n" ;
+		letras += "g-2\n" ;
+		letras += "g-2\n" ;
+		letras += "c-3\n" ;
+		letras += "c-3\n" ;
+		letras += "c-3\n" ;
+		letras += "c-3\n" ;
+		letras += "b-3\n" ;
+		letras += "b-3\n" ;
+		letras += "m-3\n" ;
+		letras += "m-3\n" ;
+		letras += "p-3\n" ;
+		letras += "p-3\n" ;
 		letras += "h-4\n" ;
 		letras += "f-4\n" ;
 		letras += "v-4\n" ;
 		letras += "y-4\n" ;
 		letras += "q-5\n" ;
+		letras += "a-1\n" ;
 		letras += "j-8\n" ;
 		letras += "ñ-8\n" ;
 		letras += "x-8\n" ;
 		letras += "z-10";
-		int g = 95;
-		string cantidad[95];
+		int g = 94;
+		string cantidad[94];
 		int i = 0;
 		for (size_t p = 0, q = 0; p != letras.npos; p = q)
 		{
 			cantidad[i] = letras.substr(p + (p != 0), (q = letras.find('\n', p + 1)) - p - (p != 0));
 			i++;
 		}
-		g = i;
 		while(g != 0)
 		{
 			string valores[2];
 			int t = 0;
-			int j = rand() %g;
+
+			srand(time(NULL));
+			int j = rand()%g;
 
 			for (size_t p = 0, q = 0; p != cantidad[j].npos; p = q)
 			{

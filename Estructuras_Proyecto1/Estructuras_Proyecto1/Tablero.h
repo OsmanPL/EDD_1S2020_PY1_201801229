@@ -271,7 +271,7 @@ public:
 	}
 	NodoMatriz* tieneNodo(int x, int y) {
 
-		NodoMatriz* fila = devolverColumna(x);
+		NodoMatriz* fila = devolverFila(x);
 		NodoMatriz* columna = devolverColumna(y);
 		if (columna!=NULL&&fila!=NULL)
 		{

@@ -1,0 +1,12 @@
+digraph Inorden{
+rankdir="LR";
+Antonio;
+Antonio -> Eduardo;
+Eduardo;
+Eduardo -> Carlos;
+Carlos;
+Carlos -> Rodrigo;
+Rodrigo;
+Rodrigo -> Heidy;
+Heidy;
+}
